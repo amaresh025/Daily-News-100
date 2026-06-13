@@ -21,22 +21,20 @@ export default function ShareButtons({ url, title }: { url: string; title: strin
   ];
 
   const shareEverywhere = async () => {
+    let shared = false;
     if (navigator.share) {
-      try { await navigator.share({ title, url, text: title }); return; }
+      try { await navigator.share({ title, url, text: title }); shared = true; }
       catch { /* user cancelled */ }
     }
-    // Fallback: copy link
-    await copyLink();
-  };
-
-  const copyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      toast({ title: 'Link copied!', description: 'Article link copied to clipboard.' });
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast({ title: 'Could not copy', variant: 'destructive' });
+    if (!shared) {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        toast({ title: 'Link copied!', description: 'Article link copied to clipboard.' });
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        toast({ title: 'Could not copy', variant: 'destructive' });
+      }
     }
   };
 
@@ -49,14 +47,9 @@ export default function ShareButtons({ url, title }: { url: string; title: strin
           <i.icon className="h-4 w-4" />
         </a>
       ))}
-      <button onClick={shareEverywhere} aria-label="Share everywhere"
+      <button onClick={shareEverywhere} aria-label="Share link"
         className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors text-xs font-semibold">
-        <Share2 className="h-4 w-4" /> Share
-      </button>
-      <button onClick={copyLink} aria-label="Copy article link"
-        className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors text-xs font-semibold">
-        {copied ? <Check className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />}
-        {copied ? 'Copied' : 'Copy link'}
+        <Share2 className="h-4 w-4" /> {copied ? 'Copied' : 'Link Share'}
       </button>
     </div>
   );
