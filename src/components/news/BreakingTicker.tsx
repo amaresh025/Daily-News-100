@@ -11,6 +11,7 @@ const BreakingTicker = () => {
         .from('posts')
         .select('title')
         .eq('status', 'published')
+        .eq('is_breaking', true)
         .order('published_at', { ascending: false })
         .limit(10);
       setItems((data ?? []).map((p: { title: string }) => p.title));

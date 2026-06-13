@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import AdminLayout from './AdminLayout';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,6 +11,8 @@ import ImageUpload from '@/components/admin/ImageUpload';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft } from 'lucide-react';
+
+const MAIN_CATEGORY_SLUGS = ['politics', 'accidents', 'business', 'sports', 'entertainment', 'technology', 'health'];
 
 interface FormState {
   title: string; slug: string; excerpt: string; content: string;
@@ -34,12 +36,15 @@ export default function PostEditor() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [form, setForm] = useState<FormState>(empty);
-  const [cats, setCats] = useState<{ id: string; name: string }[]>([]);
+  const [cats, setCats] = useState<{ id: string; name: string; slug: string }[]>([]);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(!isNew);
 
+  const mainCats = useMemo(() => cats.filter(c => MAIN_CATEGORY_SLUGS.includes(c.slug)), [cats]);
+  const otherCats = useMemo(() => cats.filter(c => !MAIN_CATEGORY_SLUGS.includes(c.slug)), [cats]);
+
   useEffect(() => {
-    supabase.from('categories').select('id,name').order('name').then(({ data }) => setCats(data ?? []));
+    supabase.from('categories').select('id,name,slug').order('name').then(({ data }) => setCats(data ?? []));
     if (!isNew) {
       supabase.from('posts').select('*').eq('id', id).maybeSingle().then(({ data }) => {
         if (data) setForm({
@@ -78,6 +83,18 @@ export default function PostEditor() {
     setBusy(false);
     if (res.error) return toast({ title: 'Save failed', description: res.error.message, variant: 'destructive' });
     toast({ title: isNew ? 'Post created' : 'Post updated' });
+    // Keep navbar selection in sync with what was chosen in editor.
+    // After save, open the public category page for the selected main category.
+    if (form.category_id) {
+      const { data: chosen } = await supabase
+        .from('categories')
+        .select('slug')
+        .eq('id', form.category_id)
+        .maybeSingle();
+
+      const slug = (chosen as any)?.slug as string | undefined;
+      if (slug) return navigate(`/category/${slug}`);
+    }
     navigate('/admin/posts');
   };
 
@@ -137,11 +154,11 @@ export default function PostEditor() {
             <select className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
               value={form.category_id} onChange={e => setForm(f => ({ ...f, category_id: e.target.value }))}>
               <option value="">— None —</option>
-              {cats.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              {mainCats.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
             <Label>Additional Categories (optional)</Label>
             <div className="space-y-1 max-h-40 overflow-auto border border-border rounded-md p-2">
-              {cats.filter(c => c.id !== form.category_id).map(c => (
+              {otherCats.filter(c => c.id !== form.category_id).map(c => (
                 <label key={c.id} className="flex items-center gap-2 text-sm cursor-pointer">
                   <input
                     type="checkbox"
@@ -156,7 +173,7 @@ export default function PostEditor() {
                   {c.name}
                 </label>
               ))}
-              {cats.length <= 1 && <div className="text-xs text-muted-foreground">Add more categories to enable extras.</div>}
+              {otherCats.length === 0 && <div className="text-xs text-muted-foreground">Add more categories to enable extras.</div>}
             </div>
             <Label>Author</Label>
 
