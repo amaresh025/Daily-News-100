@@ -3,4 +3,5 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 
-Sitemap: https://dailynews100.pages.dev/sitemap.xml
+Sitemap: https://dailynews100.com/sitemap.xml
+

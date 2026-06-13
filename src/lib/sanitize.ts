@@ -13,7 +13,7 @@ export function sanitizeHtml(dirty: string): string {
       'table', 'thead', 'tbody', 'tr', 'th', 'td',
       'span', 'div', 'figure', 'figcaption',
     ],
-    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'target', 'rel', 'class'],
+    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'target', 'rel', 'class', 'width', 'height', 'style'],
     ALLOW_DATA_ATTR: false,
     FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input'],
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'style'],
