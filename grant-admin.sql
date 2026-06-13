@@ -1,0 +1,1 @@
+SELECT public.promote_to_admin('3404cb92-bc49-496e-b21a-b233d8778209');

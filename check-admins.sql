@@ -1,0 +1,1 @@
+SELECT user_id, role::text FROM public.user_roles WHERE role = 'admin';

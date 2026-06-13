@@ -1,0 +1,1 @@
+SELECT user_id, role::text FROM public.user_roles WHERE user_id = '3404cb92-bc49-496e-b21a-b233d8778209';
