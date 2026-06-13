@@ -26,7 +26,7 @@ export default function AdminSettings() {
   useEffect(() => {
     supabase.from('site_settings').select('key,value').then(({ data }) => {
       const o: Record<string, string> = {};
-      (data ?? []).forEach((r: any) => { o[r.key] = typeof r.value === 'string' ? r.value : r.value?.value ?? ''; });
+      (data ?? []).forEach((r: { key: string; value: unknown }) => { o[r.key] = typeof r.value === 'string' ? r.value : r.value?.value ?? ''; });
       setVals(o);
     });
   }, []);

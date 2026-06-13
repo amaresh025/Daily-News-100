@@ -41,7 +41,7 @@ export default function ArticlePage() {
       if (!data) { setNotFound(true); setLoading(false); return; }
       setPost(data as Article);
       setLoading(false);
-      const extraIds = ((data as any).extra_category_ids ?? []) as string[];
+      const extraIds = (data.extra_category_ids ?? []) as string[];
       if (extraIds.length) {
         const { data: ec } = await supabase.from('categories').select('id,name,slug').in('id', extraIds);
         setExtraCats((ec as ExtraCat[]) ?? []);

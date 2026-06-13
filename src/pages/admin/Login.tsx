@@ -51,8 +51,9 @@ export default function AdminLoginPage() {
         if (error) throw error;
         navigate('/admin', { replace: true });
       }
-    } catch (err: any) {
-      toast({ title: 'Error', description: err.message ?? 'Authentication failed', variant: 'destructive' });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Authentication failed';
+      toast({ title: 'Error', description: msg, variant: 'destructive' });
     } finally {
       setBusy(false);
     }

@@ -51,7 +51,7 @@ export default function PostEditor() {
           title: data.title, slug: data.slug, excerpt: data.excerpt ?? '', content: data.content ?? '',
           featured_image: data.featured_image ?? '', author_name: data.author_name,
           category_id: data.category_id ?? '',
-          extra_category_ids: (data as any).extra_category_ids ?? [],
+          extra_category_ids: (data.extra_category_ids ?? []) as string[],
           status: data.status as 'draft' | 'published',
           is_breaking: data.is_breaking, is_trending: data.is_trending,
           meta_title: data.meta_title ?? '', meta_description: data.meta_description ?? '',
@@ -92,7 +92,7 @@ export default function PostEditor() {
         .eq('id', form.category_id)
         .maybeSingle();
 
-      const slug = (chosen as any)?.slug as string | undefined;
+      const slug = chosen?.slug;
       if (slug) return navigate(`/category/${slug}`);
     }
     navigate('/admin/posts');
@@ -135,7 +135,7 @@ export default function PostEditor() {
           <div className="bg-card border border-border rounded-lg p-4 space-y-3">
             <Label>Status</Label>
             <select className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
-              value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value as any }))}>
+              value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value as 'draft' | 'published' }))}>
               <option value="draft">Draft</option>
               <option value="published">Published</option>
             </select>
