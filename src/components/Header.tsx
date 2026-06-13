@@ -61,11 +61,13 @@ const Header = () => {
 
       <div className="container-blog">
         <div className="flex items-center justify-between h-20 gap-2">
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
             {showBack && (
-              <Button variant="ghost" size="sm" onClick={goBack} aria-label="Go back" className="shrink-0">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={goBack} aria-label="Go back" className="shrink-0">
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+              </div>
             )}
             <Link to="/" className="flex items-center gap-2 min-w-0" aria-label="DailyNews100 home">
               <span className="inline-flex items-baseline">
