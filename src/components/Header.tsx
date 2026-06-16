@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Search, Facebook, Twitter, Instagram, Menu, X, Youtube, ArrowLeft } from 'lucide-react';
+import { Search, Facebook, Twitter, Instagram, Menu, X, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from './ThemeToggle';
 
@@ -32,18 +32,6 @@ const Header = () => {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 
-  const showBack = location.pathname !== '/';
-
-  const goBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-      // Force a fresh load after navigating back, as requested.
-      setTimeout(() => window.location.reload(), 50);
-    } else {
-      navigate('/');
-    }
-  };
-
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="hidden md:block bg-foreground text-background text-xs">
@@ -62,13 +50,6 @@ const Header = () => {
       <div className="container-blog">
         <div className="flex items-center justify-between h-16 md:h-20 gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            {showBack && (
-              <div className="hidden md:flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={goBack} aria-label="Go back" className="shrink-0">
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-              </div>
-            )}
             <Link to="/" className="flex items-center gap-2 min-w-0" aria-label="DailyNews100 home">
               <span className="inline-flex items-baseline">
                 <span className="text-xl sm:text-3xl font-extrabold tracking-tight text-foreground">DailyNews</span>

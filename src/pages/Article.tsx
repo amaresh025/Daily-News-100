@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
-import { Clock, Eye, User as UserIcon, Calendar } from 'lucide-react';
+import { Clock, Eye, User as UserIcon, Calendar, ArrowLeft } from 'lucide-react';
 import ShareButtons from '@/components/article/ShareButtons';
 import CommentsSection from '@/components/article/CommentsSection';
 import NewsCard from '@/components/news/NewsCard';
@@ -24,11 +24,20 @@ const readingTime = (txt: string) => Math.max(1, Math.round(txt.replace(/<[^>]+>
 
 export default function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const [post, setPost] = useState<Article | null>(null);
   const [extraCats, setExtraCats] = useState<ExtraCat[]>([]);
   const [related, setRelated] = useState<PostRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+
+  const goBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
 
   useEffect(() => {
     if (!slug) return;
@@ -108,6 +117,18 @@ export default function ArticlePage() {
       </Helmet>
 
       <Header />
+
+      <div className="container-blog max-w-4xl pt-4">
+        <button
+          onClick={goBack}
+          className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </button>
+      </div>
+
       <main id="main-content" className="container-blog py-8 max-w-4xl">
         <nav className="text-xs text-muted-foreground mb-4">
           <Link to="/" className="hover:text-primary">Home</Link>
