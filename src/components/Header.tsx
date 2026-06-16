@@ -60,10 +60,10 @@ const Header = () => {
       </div>
 
       <div className="container-blog">
-        <div className="flex items-center justify-between h-20 gap-2">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
+        <div className="flex items-center justify-between h-16 md:h-20 gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             {showBack && (
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={goBack} aria-label="Go back" className="shrink-0">
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
@@ -71,8 +71,8 @@ const Header = () => {
             )}
             <Link to="/" className="flex items-center gap-2 min-w-0" aria-label="DailyNews100 home">
               <span className="inline-flex items-baseline">
-                <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">DailyNews</span>
-                <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">100</span>
+                <span className="text-xl sm:text-3xl font-extrabold tracking-tight text-foreground">DailyNews</span>
+                <span className="text-xl sm:text-3xl font-extrabold tracking-tight text-primary">100</span>
               </span>
               <span className="hidden lg:inline text-[10px] uppercase tracking-widest text-muted-foreground border-l border-border pl-2 ml-1">
                 Latest News

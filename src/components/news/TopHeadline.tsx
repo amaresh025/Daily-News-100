@@ -15,7 +15,7 @@ const TopHeadline = () => {
         {/* Hero */}
         <article className="lg:col-span-2 relative rounded-lg overflow-hidden group bg-card border border-border">
           <Link to={`/blog/${hero.slug}`} className="block">
-            <div className="aspect-[16/10] overflow-hidden">
+            <div className="aspect-[16/10] md:aspect-[16/10] overflow-hidden">
               <img
                 src={hero.featured_image ?? ''}
                 alt={hero.title}
@@ -24,20 +24,20 @@ const TopHeadline = () => {
                 fetchPriority="high"
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white space-y-3">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 text-white space-y-2 md:space-y-3">
               <div className="flex items-center gap-2">
                 {hero.is_breaking && <span className="badge-breaking">Breaking</span>}
                 {hero.categories && <span className="badge-category">{hero.categories.name}</span>}
               </div>
-              <h3 className="text-2xl md:text-4xl font-extrabold leading-tight">{hero.title}</h3>
+              <h3 className="text-lg md:text-4xl font-extrabold leading-tight line-clamp-3">{hero.title}</h3>
               {hero.excerpt && (
-                <p className="text-sm md:text-base opacity-90 line-clamp-2 max-w-3xl">{hero.excerpt}</p>
+                <p className="text-xs md:text-base opacity-90 line-clamp-2 max-w-3xl hidden md:block">{hero.excerpt}</p>
               )}
-              <div className="flex items-center gap-4 text-xs opacity-80">
+              <div className="flex items-center gap-3 md:gap-4 text-[11px] md:text-xs opacity-80">
                 <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {formatDate(hero.published_at)}</span>
                 <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {hero.views.toLocaleString('en-IN')}</span>
-                <span>By {hero.author_name}</span>
+                <span className="hidden md:inline">By {hero.author_name}</span>
               </div>
             </div>
           </Link>
