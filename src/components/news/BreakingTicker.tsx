@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Radio } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { BreakingTickerSkeleton } from './NewsCardSkeleton';
 
 const BreakingTicker = () => {
   const [items, setItems] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let alive = true;
     (async () => {
       const { data } = await supabase
         .from('posts')
@@ -14,10 +17,12 @@ const BreakingTicker = () => {
         .eq('is_breaking', true)
         .order('published_at', { ascending: false })
         .limit(10);
-      setItems((data ?? []).map((p: { title: string }) => p.title));
+      if (alive) { setItems((data ?? []).map((p: { title: string }) => p.title)); setLoading(false); }
     })();
+    return () => { alive = false; };
   }, []);
 
+  if (loading) return <BreakingTickerSkeleton />;
   if (!items.length) return null;
   const loop = [...items, ...items];
 

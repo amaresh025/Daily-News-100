@@ -75,7 +75,7 @@ const META: Record<string, CatMeta> = {
 
 const Category = () => {
   const { slug = '' } = useParams();
-  const posts = useCategoryPosts(slug, 50);
+  const { posts } = useCategoryPosts(slug, 50);
   const meta = META[slug];
   const label = meta?.label ?? slug;
 

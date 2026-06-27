@@ -3,23 +3,21 @@ import { Link } from 'react-router-dom';
 import AdminLayout from './AdminLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, MessageSquare, Mail, FolderTree, Plus } from 'lucide-react';
+import { FileText, Mail, FolderTree, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ posts: 0, comments: 0, messages: 0, categories: 0 });
+  const [stats, setStats] = useState({ posts: 0, messages: 0, categories: 0 });
 
   useEffect(() => {
     (async () => {
-      const [p, c, m, cat] = await Promise.all([
+      const [p, m, cat] = await Promise.all([
         supabase.from('posts').select('*', { count: 'exact', head: true }),
-        supabase.from('comments').select('*', { count: 'exact', head: true }),
         supabase.from('contact_messages').select('*', { count: 'exact', head: true }),
         supabase.from('categories').select('*', { count: 'exact', head: true }),
       ]);
       setStats({
-        posts: p.count ?? 0, comments: c.count ?? 0,
-        messages: m.count ?? 0, categories: cat.count ?? 0,
+        posts: p.count ?? 0, messages: m.count ?? 0, categories: cat.count ?? 0,
       });
     })();
   }, []);
@@ -27,7 +25,6 @@ export default function AdminDashboard() {
   const cards = [
     { label: 'Total Posts', value: stats.posts, icon: FileText, to: '/admin/posts' },
     { label: 'Categories', value: stats.categories, icon: FolderTree, to: '/admin/categories' },
-    { label: 'Comments', value: stats.comments, icon: MessageSquare, to: '/admin/comments' },
     { label: 'Messages', value: stats.messages, icon: Mail, to: '/admin/messages' },
   ];
 

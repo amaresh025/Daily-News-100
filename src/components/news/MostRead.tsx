@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { PostRow } from '@/hooks/usePosts';
+import { MostReadSkeleton } from './NewsCardSkeleton';
 
 const MostRead = () => {
   const [posts, setPosts] = useState<PostRow[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    let alive = true;
     (async () => {
       const { data } = await supabase
         .from('posts')
@@ -14,9 +17,11 @@ const MostRead = () => {
         .eq('status', 'published')
         .order('views', { ascending: false })
         .limit(5);
-      setPosts((data as PostRow[]) ?? []);
+      if (alive) { setPosts((data as PostRow[]) ?? []); setLoading(false); }
     })();
+    return () => { alive = false; };
   }, []);
+  if (loading) return <MostReadSkeleton />;
   if (!posts.length) return null;
   return (
     <section className="container-blog py-10" aria-labelledby="most-read-heading">

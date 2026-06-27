@@ -1,9 +1,11 @@
 import { TrendingUp } from 'lucide-react';
 import NewsCard from './NewsCard';
 import { usePosts } from '@/hooks/usePosts';
+import { TrendingNewsSkeleton } from './NewsCardSkeleton';
 
 const TrendingNews = () => {
-  const { posts } = usePosts({ trending: true, limit: 4 });
+  const { posts, loading } = usePosts({ trending: true, limit: 4 });
+  if (loading) return <TrendingNewsSkeleton />;
   if (!posts.length) return null;
   return (
     <section className="container-blog py-10 bg-accent/40 rounded-xl my-6" aria-labelledby="trending-heading">

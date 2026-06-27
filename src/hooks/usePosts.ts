@@ -79,11 +79,13 @@ export function usePosts(opts: {
 
 export function useCategoryPosts(slug: string, limit = 4) {
   const [posts, setPosts] = useState<PostRow[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    let alive = true;
+    setLoading(true);
     (async () => {
       const { data: cat } = await supabase.from('categories').select('id').eq('slug', slug).maybeSingle();
-      if (!cat) { setPosts([]); return; }
-      // Posts where this is the primary category OR is listed in extra_category_ids
+      if (!cat) { if (alive) { setPosts([]); setLoading(false); } return; }
       const { data } = await supabase
         .from('posts')
         .select('id,title,slug,excerpt,featured_image,author_name,is_breaking,is_trending,views,published_at,category_id,extra_category_ids, categories(id,name,slug)')
@@ -91,9 +93,10 @@ export function useCategoryPosts(slug: string, limit = 4) {
         .or(`category_id.eq.${cat.id},extra_category_ids.cs.{${cat.id}}`)
         .order('published_at', { ascending: false })
         .limit(limit);
-      setPosts((data as PostRow[]) ?? []);
+      if (alive) { setPosts((data as PostRow[]) ?? []); setLoading(false); }
     })();
+    return () => { alive = false; };
   }, [slug, limit]);
-  return posts;
+  return { posts, loading };
 }
 

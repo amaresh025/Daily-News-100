@@ -6,7 +6,6 @@ import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
 import { Clock, Eye, User as UserIcon, Calendar, ArrowLeft } from 'lucide-react';
 import ShareButtons from '@/components/article/ShareButtons';
-import CommentsSection from '@/components/article/CommentsSection';
 import NewsCard from '@/components/news/NewsCard';
 import { sanitizeHtml } from '@/lib/sanitize';
 import type { PostRow } from '@/hooks/usePosts';
@@ -162,8 +161,6 @@ export default function ArticlePage() {
         <div className="py-6 border-y border-border">
           <ShareButtons url={url} title={post.title} />
         </div>
-
-        <CommentsSection postId={post.id} />
 
         {related.length > 0 && (
           <section className="mt-12">

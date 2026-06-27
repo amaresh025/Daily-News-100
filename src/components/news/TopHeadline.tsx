@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Clock, Eye } from 'lucide-react';
 import { usePosts, formatDate } from '@/hooks/usePosts';
+import { TopHeadlineSkeleton } from './NewsCardSkeleton';
 
 const TopHeadline = () => {
-  const { posts } = usePosts({ limit: 5 });
+  const { posts, loading } = usePosts({ limit: 5 });
+  if (loading) return <TopHeadlineSkeleton />;
   if (!posts.length) return null;
 
   const [hero, ...side] = posts;

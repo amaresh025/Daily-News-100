@@ -1,8 +1,10 @@
 import NewsCard from './NewsCard';
 import { usePosts } from '@/hooks/usePosts';
+import { LatestNewsSkeleton } from './NewsCardSkeleton';
 
 const LatestNews = () => {
-  const { posts } = usePosts({ limit: 8 });
+  const { posts, loading } = usePosts({ limit: 8 });
+  if (loading) return <LatestNewsSkeleton count={8} />;
   // Skip first 5 (used in TopHeadline) to avoid duplication
   const list = posts.slice(5);
   if (!list.length) return null;

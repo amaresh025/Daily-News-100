@@ -26,7 +26,6 @@ const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminPosts = lazy(() => import("./pages/admin/AdminPosts"));
 const PostEditor = lazy(() => import("./pages/admin/PostEditor"));
 const AdminCategories = lazy(() => import("./pages/admin/AdminCategories"));
-const AdminComments = lazy(() => import("./pages/admin/AdminComments"));
 const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
 
@@ -72,7 +71,6 @@ const App = () => (
                 <Route path="/admin/posts/new" element={<PostEditor />} />
                 <Route path="/admin/posts/:id" element={<PostEditor />} />
                 <Route path="/admin/categories" element={<AdminCategories />} />
-                <Route path="/admin/comments" element={<AdminComments />} />
                 <Route path="/admin/messages" element={<AdminMessages />} />
                 <Route path="/admin/settings" element={<AdminSettings />} />
 

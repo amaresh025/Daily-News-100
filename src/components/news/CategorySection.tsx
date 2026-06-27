@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import NewsCard from './NewsCard';
 import { useCategoryPosts } from '@/hooks/usePosts';
+import { CategorySectionSkeleton } from './NewsCardSkeleton';
 
 interface CategorySectionProps {
   title: string;
@@ -10,7 +11,8 @@ interface CategorySectionProps {
 }
 
 const CategorySection = ({ title, slug }: CategorySectionProps) => {
-  const posts = useCategoryPosts(slug, 4);
+  const { posts, loading } = useCategoryPosts(slug, 4);
+  if (loading) return <CategorySectionSkeleton />;
   if (!posts.length) return null;
 
   const [lead, ...rest] = posts;

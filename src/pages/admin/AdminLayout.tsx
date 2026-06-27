@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { Link, NavLink, Navigate, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileText, FolderTree, MessageSquare, Mail, Settings, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileText, FolderTree, Mail, Settings, LogOut, Menu, X } from 'lucide-react';
 import { useIsAdmin } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,6 @@ const links = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/admin/posts', icon: FileText, label: 'Posts' },
   { to: '/admin/categories', icon: FolderTree, label: 'Categories' },
-  { to: '/admin/comments', icon: MessageSquare, label: 'Comments' },
   { to: '/admin/messages', icon: Mail, label: 'Messages' },
   { to: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
