@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
-import { Clock, Eye, User as UserIcon, Calendar, ArrowLeft } from 'lucide-react';
+import { Clock, User as UserIcon, Calendar, ArrowLeft } from 'lucide-react';
 import ShareButtons from '@/components/article/ShareButtons';
 import NewsCard from '@/components/news/NewsCard';
 import { sanitizeHtml } from '@/lib/sanitize';
@@ -151,7 +151,6 @@ export default function ArticlePage() {
             <span className="flex items-center gap-1"><UserIcon className="h-4 w-4" /> {post.author_name}</span>
             <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {new Date(published).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
             <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> {readingTime(post.content)} min read</span>
-            <span className="flex items-center gap-1"><Eye className="h-4 w-4" /> {post.views.toLocaleString('en-IN')}</span>
           </div>
         </div>
 

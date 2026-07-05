@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Clock, Eye } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { usePosts, formatDate } from '@/hooks/usePosts';
 import { TopHeadlineSkeleton } from './NewsCardSkeleton';
 
@@ -38,7 +38,6 @@ const TopHeadline = () => {
               )}
               <div className="flex items-center gap-3 md:gap-4 text-[11px] md:text-xs opacity-80">
                 <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {formatDate(hero.published_at)}</span>
-                <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {hero.views.toLocaleString('en-IN')}</span>
                 <span className="hidden md:inline">By {hero.author_name}</span>
               </div>
             </div>
