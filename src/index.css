@@ -47,6 +47,9 @@
     --news-orange-dark: 22 100% 42%;
     --news-ink: 0 0% 12%;
 
+    /* Skeleton loading */
+    --skeleton: 25 12% 87%;
+
     /* Layout */
     --content-width: 1280px;
     --header-height: 80px;
@@ -97,6 +100,8 @@
     --news-orange: 25 100% 55%;
     --news-orange-dark: 22 100% 48%;
     --news-ink: 0 0% 98%;
+
+    --skeleton: 0 0% 19%;
 
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 95%;
