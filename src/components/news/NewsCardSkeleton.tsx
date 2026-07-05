@@ -111,4 +111,77 @@ const BreakingTickerSkeleton = () => (
   </div>
 );
 
-export { CardSkeleton, TopHeadlineSkeleton, LatestNewsSkeleton, TrendingNewsSkeleton, CategorySectionSkeleton, MostReadSkeleton, BreakingTickerSkeleton };
+const ArticleSkeleton = () => (
+  <div className="min-h-screen bg-background">
+    <div className="container-blog max-w-4xl pt-4">
+      <Skeleton className="h-4 w-20 rounded" />
+    </div>
+    <main className="container-blog py-8 max-w-4xl">
+      <div className="space-y-4 mb-6">
+        <Skeleton className="h-4 w-32 rounded" />
+        <Skeleton className="h-10 w-full rounded" />
+        <Skeleton className="h-10 w-3/4 rounded" />
+        <Skeleton className="h-5 w-2/3 rounded" />
+        <div className="flex gap-4 py-3 border-y border-border">
+          <Skeleton className="h-4 w-32 rounded" />
+          <Skeleton className="h-4 w-40 rounded" />
+          <Skeleton className="h-4 w-24 rounded" />
+          <Skeleton className="h-4 w-20 rounded" />
+        </div>
+      </div>
+      <Skeleton className="w-full aspect-video rounded-lg mb-8" />
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-full rounded" />
+        <Skeleton className="h-4 w-full rounded" />
+        <Skeleton className="h-4 w-5/6 rounded" />
+        <Skeleton className="h-4 w-full rounded" />
+        <Skeleton className="h-4 w-4/5 rounded" />
+        <Skeleton className="h-4 w-full rounded" />
+        <Skeleton className="h-4 w-3/4 rounded" />
+      </div>
+    </main>
+  </div>
+);
+
+const SearchResultsSkeleton = () => (
+  <div className="container-blog py-12">
+    <div className="max-w-3xl mx-auto">
+      <Skeleton className="h-10 w-64 mb-6 rounded" />
+      <Skeleton className="h-12 w-full mb-8 rounded" />
+      <div className="space-y-4">
+        {[1, 2, 3, 4, 5].map(i => (
+          <div key={i} className="flex gap-4 p-4 bg-card border border-border rounded-lg">
+            <Skeleton className="w-32 h-24 rounded object-cover shrink-0" />
+            <div className="min-w-0 flex-1 space-y-2">
+              <Skeleton className="h-4 w-20 rounded" />
+              <Skeleton className="h-5 w-full rounded" />
+              <Skeleton className="h-5 w-3/4 rounded" />
+              <Skeleton className="h-4 w-full rounded" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const LatestPageSkeleton = ({ count = 50 }: { count?: number }) => (
+  <div className="container-blog py-10">
+    <Skeleton className="h-8 w-48 mb-6 rounded" />
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {Array.from({ length: count }).map((_, i) => <CardSkeleton key={i} size="lg" />)}
+    </div>
+  </div>
+);
+
+const CategoryPageSkeleton = () => (
+  <div className="container-blog py-10">
+    <Skeleton className="h-8 w-64 mb-4 rounded" />
+    <Skeleton className="h-4 w-full max-w-3xl mb-6 rounded" />
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {Array.from({ length: 9 }).map((_, i) => <CardSkeleton key={i} size="lg" />)}
+    </div>
+  </div>
+);
+
+export { CardSkeleton, TopHeadlineSkeleton, LatestNewsSkeleton, TrendingNewsSkeleton, CategorySectionSkeleton, MostReadSkeleton, BreakingTickerSkeleton, ArticleSkeleton, SearchResultsSkeleton, LatestPageSkeleton, CategoryPageSkeleton };

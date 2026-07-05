@@ -6,7 +6,9 @@ import { ThemeProvider } from "next-themes";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SkipLink from "@/components/SkipLink";
-import { Suspense, lazy } from "react";
+import ScrollToTop from "@/components/ScrollToTop";
+import { Suspense, lazy, useState, useCallback } from "react";
+import { NavigationRefreshContext } from "@/hooks/useNavigationRefresh";
 import Index from "./pages/Index";
 
 const Article = lazy(() => import("./pages/Article"));
@@ -42,46 +44,54 @@ const PageLoader = () => (
   </div>
 );
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <HelmetProvider>
-      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-        <TooltipProvider>
-          <SkipLink />
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/latest" element={<Latest />} />
-                <Route path="/category/:slug" element={<Category />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/search" element={<SearchResults />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/blog/:slug" element={<Article />} />
-                <Route path="/article/:slug" element={<Article />} />
+const App = () => {
+  const [refreshKey, setRefreshKey] = useState(0);
+  const triggerRefresh = useCallback(() => setRefreshKey(k => k + 1), []);
 
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/posts" element={<AdminPosts />} />
-                <Route path="/admin/posts/new" element={<PostEditor />} />
-                <Route path="/admin/posts/:id" element={<PostEditor />} />
-                <Route path="/admin/categories" element={<AdminCategories />} />
-                <Route path="/admin/messages" element={<AdminMessages />} />
-                <Route path="/admin/settings" element={<AdminSettings />} />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <TooltipProvider>
+            <NavigationRefreshContext.Provider value={{ refreshKey, triggerRefresh }}>
+              <SkipLink />
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <ScrollToTop />
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    <Route path="/" element={<Index key={`index-${refreshKey}`} />} />
+                    <Route path="/latest" element={<Latest key={`latest-${refreshKey}`} />} />
+                    <Route path="/category/:slug" element={<Category key={`cat-${refreshKey}`} />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/search" element={<SearchResults key={`search-${refreshKey}`} />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/faq" element={<FAQ />} />
+                    <Route path="/blog/:slug" element={<Article key={`article-${refreshKey}`} />} />
+                    <Route path="/article/:slug" element={<Article key={`article2-${refreshKey}`} />} />
 
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </TooltipProvider>
-      </ThemeProvider>
-    </HelmetProvider>
-  </QueryClientProvider>
-);
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin/posts" element={<AdminPosts />} />
+                    <Route path="/admin/posts/new" element={<PostEditor />} />
+                    <Route path="/admin/posts/:id" element={<PostEditor />} />
+                    <Route path="/admin/categories" element={<AdminCategories />} />
+                    <Route path="/admin/messages" element={<AdminMessages />} />
+                    <Route path="/admin/settings" element={<AdminSettings />} />
+
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+            </NavigationRefreshContext.Provider>
+          </TooltipProvider>
+        </ThemeProvider>
+      </HelmetProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

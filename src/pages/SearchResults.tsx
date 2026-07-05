@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { SearchResultsSkeleton } from '@/components/news/NewsCardSkeleton';
 
 interface Suggestion {
   id: string;
@@ -124,25 +125,29 @@ const SearchResults = () => {
 
           {currentQuery ? (
             <section>
-              <p className="text-sm text-muted-foreground mb-4">
-                {loading
-                  ? 'Searching…'
-                  : results.length > 0
-                    ? `Found ${results.length} result${results.length === 1 ? '' : 's'} for "${currentQuery}"`
-                    : `No articles found for "${currentQuery}"`}
-              </p>
-              <div className="space-y-4">
-                {results.map(r => (
-                  <Link key={r.id} to={`/blog/${r.slug}`} className="flex gap-4 p-4 bg-card border border-border rounded-lg hover:border-primary transition-colors">
-                    {r.featured_image && <img src={r.featured_image} alt="" className="w-32 h-24 rounded object-cover shrink-0" />}
-                    <div className="min-w-0">
-                      {r.categories && <span className="badge-category text-[10px]">{r.categories.name}</span>}
-                      <h2 className="text-lg font-bold mt-1 line-clamp-2">{r.title}</h2>
-                      {r.excerpt && <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{r.excerpt}</p>}
-                    </div>
-                  </Link>
-                ))}
-              </div>
+              {loading ? (
+                <SearchResultsSkeleton />
+              ) : (
+                <>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {results.length > 0
+                      ? `Found ${results.length} result${results.length === 1 ? '' : 's'} for "${currentQuery}"`
+                      : `No articles found for "${currentQuery}"`}
+                  </p>
+                  <div className="space-y-4">
+                    {results.map(r => (
+                      <Link key={r.id} to={`/blog/${r.slug}`} className="flex gap-4 p-4 bg-card border border-border rounded-lg hover:border-primary transition-colors">
+                        {r.featured_image && <img src={r.featured_image} alt="" className="w-32 h-24 rounded object-cover shrink-0" />}
+                        <div className="min-w-0">
+                          {r.categories && <span className="badge-category text-[10px]">{r.categories.name}</span>}
+                          <h2 className="text-lg font-bold mt-1 line-clamp-2">{r.title}</h2>
+                          {r.excerpt && <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{r.excerpt}</p>}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
             </section>
           ) : (
             <div className="text-center py-8">

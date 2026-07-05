@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useCallback, useState } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Search, Facebook, Twitter, Instagram, Menu, X, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigationRefresh } from '@/hooks/useNavigationRefresh';
 import ThemeToggle from './ThemeToggle';
 
 const navItems = [
@@ -28,9 +29,24 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { triggerRefresh } = useNavigationRefresh();
   const today = new Date().toLocaleDateString('en-IN', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
+
+  const handleLogoClick = useCallback((e: React.MouseEvent) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      triggerRefresh();
+    }
+  }, [location.pathname, triggerRefresh]);
+
+  const handleNavClick = useCallback((e: React.MouseEvent, href: string) => {
+    if (location.pathname === href) {
+      e.preventDefault();
+      triggerRefresh();
+    }
+  }, [location.pathname, triggerRefresh]);
 
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50 shadow-sm">
@@ -50,7 +66,7 @@ const Header = () => {
       <div className="container-blog">
         <div className="flex items-center justify-between h-16 md:h-20 gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <Link to="/" className="flex items-center gap-2 min-w-0" aria-label="DailyNews100 home">
+            <a href="/" onClick={handleLogoClick} className="flex items-center gap-2 min-w-0" aria-label="DailyNews100 home">
               <span className="inline-flex items-baseline">
                 <span className="text-xl sm:text-3xl font-extrabold tracking-tight text-foreground">DailyNews</span>
                 <span className="text-xl sm:text-3xl font-extrabold tracking-tight text-primary">100</span>
@@ -58,7 +74,7 @@ const Header = () => {
               <span className="hidden lg:inline text-[10px] uppercase tracking-widest text-muted-foreground border-l border-border pl-2 ml-1">
                 Latest News
               </span>
-            </Link>
+            </a>
           </div>
 
           <div className="flex items-center gap-2">
@@ -79,6 +95,7 @@ const Header = () => {
                 <NavLink
                   to={item.href}
                   end={item.href === '/'}
+                  onClick={(e) => handleNavClick(e, item.href)}
                   className={({ isActive }) =>
                     `text-sm font-semibold uppercase tracking-wide px-3 py-3 block transition-colors duration-150
                      hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded
@@ -100,10 +117,13 @@ const Header = () => {
                   key={item.name}
                   to={item.href}
                   end={item.href === '/'}
+                  onClick={(e) => {
+                    setIsMenuOpen(false);
+                    handleNavClick(e, item.href);
+                  }}
                   className={({ isActive }) =>
                     `py-2 px-2 text-sm font-semibold uppercase tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded ${isActive ? 'text-primary' : 'text-foreground'}`
                   }
-                  onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </NavLink>

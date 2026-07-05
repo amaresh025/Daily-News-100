@@ -8,6 +8,7 @@ import { Clock, Eye, User as UserIcon, Calendar, ArrowLeft } from 'lucide-react'
 import ShareButtons from '@/components/article/ShareButtons';
 import NewsCard from '@/components/news/NewsCard';
 import { sanitizeHtml } from '@/lib/sanitize';
+import { ArticleSkeleton } from '@/components/news/NewsCardSkeleton';
 import type { PostRow } from '@/hooks/usePosts';
 
 interface Article extends PostRow {
@@ -66,7 +67,7 @@ export default function ArticlePage() {
     })();
   }, [slug]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading article…</div>;
+  if (loading) return <ArticleSkeleton />;
   if (notFound || !post) return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4">
       <h1 className="text-3xl font-bold">Article not found</h1>

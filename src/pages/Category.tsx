@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/news/NewsCard';
 import { useCategoryPosts } from '@/hooks/usePosts';
+import { CategoryPageSkeleton } from '@/components/news/NewsCardSkeleton';
 
 interface CatMeta {
   label: string;
@@ -75,7 +76,7 @@ const META: Record<string, CatMeta> = {
 
 const Category = () => {
   const { slug = '' } = useParams();
-  const { posts } = useCategoryPosts(slug, 50);
+  const { posts, loading } = useCategoryPosts(slug, 50);
   const meta = META[slug];
   const label = meta?.label ?? slug;
 
@@ -94,31 +95,39 @@ const Category = () => {
       )}
       <Header />
       <main id="main-content" className="flex-1">
-        <div className="container-blog py-10">
-          <h1 className="section-title" dangerouslySetInnerHTML={{ __html: meta?.h1 ?? label }} />
-          {meta && (
-            <p className="text-muted-foreground max-w-3xl mb-6">{meta.metaDescription}</p>
-          )}
+        {loading ? (
+          <div className="container-blog py-10">
+            <h1 className="section-title" dangerouslySetInnerHTML={{ __html: meta?.h1 ?? label }} />
+            {meta && <p className="text-muted-foreground max-w-3xl mb-6">{meta.metaDescription}</p>}
+            <CategoryPageSkeleton />
+          </div>
+        ) : (
+          <div className="container-blog py-10">
+            <h1 className="section-title" dangerouslySetInnerHTML={{ __html: meta?.h1 ?? label }} />
+            {meta && (
+              <p className="text-muted-foreground max-w-3xl mb-6">{meta.metaDescription}</p>
+            )}
 
-          {posts.length === 0 ? (
-            <p className="text-muted-foreground">No stories published yet in this section.</p>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {posts.map((p) => <NewsCard key={p.id} post={p} size="lg" />)}
-            </div>
-          )}
-
-          {meta && meta.related.length > 0 && (
-            <aside className="mt-12 border-t border-border pt-6">
-              <h2 className="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3">Explore related sections</h2>
-              <div className="flex flex-wrap gap-3">
-                {meta.related.map(r => (
-                  <Link key={r.slug} to={`/category/${r.slug}`} className="px-3 py-1.5 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground text-sm transition-colors" dangerouslySetInnerHTML={{ __html: r.label }} />
-                ))}
+            {posts.length === 0 ? (
+              <p className="text-muted-foreground">No stories published yet in this section.</p>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {posts.map((p) => <NewsCard key={p.id} post={p} size="lg" />)}
               </div>
-            </aside>
-          )}
-        </div>
+            )}
+
+            {meta && meta.related.length > 0 && (
+              <aside className="mt-12 border-t border-border pt-6">
+                <h2 className="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3">Explore related sections</h2>
+                <div className="flex flex-wrap gap-3">
+                  {meta.related.map(r => (
+                    <Link key={r.slug} to={`/category/${r.slug}`} className="px-3 py-1.5 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground text-sm transition-colors" dangerouslySetInnerHTML={{ __html: r.label }} />
+                  ))}
+                </div>
+              </aside>
+            )}
+          </div>
+        )}
       </main>
       <Footer />
     </div>
