@@ -75,7 +75,7 @@ export default function ArticlePage() {
     </div>
   );
 
-  const url = `${window.location.origin}/blog/${post.slug}`;
+  const url = `https://dailynews100.com/blog/${post.slug}`;
   const title = post.meta_title || post.title;
   const desc = post.meta_description || post.excerpt || '';
   const img = post.featured_image || '';
@@ -85,14 +85,14 @@ export default function ArticlePage() {
     '@context': 'https://schema.org', '@type': 'NewsArticle',
     headline: post.title, image: img ? [img] : undefined, datePublished: published, dateModified: published,
     author: { '@type': 'Person', name: post.author_name },
-    publisher: { '@type': 'Organization', name: 'DailyNews100', logo: { '@type': 'ImageObject', url: `${window.location.origin}/favicon.ico` } },
+    publisher: { '@type': 'Organization', name: 'DailyNews100', logo: { '@type': 'ImageObject', url: `https://dailynews100.com/favicon.ico` } },
     description: desc, mainEntityOfPage: url,
   };
   const crumbs = {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin },
-      ...(post.categories ? [{ '@type': 'ListItem', position: 2, name: post.categories.name, item: `${window.location.origin}/category/${post.categories.slug}` }] : []),
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://dailynews100.com' },
+      ...(post.categories ? [{ '@type': 'ListItem', position: 2, name: post.categories.name, item: `https://dailynews100.com/category/${post.categories.slug}` }] : []),
       { '@type': 'ListItem', position: post.categories ? 3 : 2, name: post.title, item: url },
     ],
   };

@@ -3,11 +3,21 @@ import Footer from '@/components/Footer';
 import NewsCard from '@/components/news/NewsCard';
 import { usePosts } from '@/hooks/usePosts';
 import { LatestPageSkeleton } from '@/components/news/NewsCardSkeleton';
+import { Helmet } from 'react-helmet-async';
 
 const Latest = () => {
   const { posts, loading } = usePosts({ limit: 50 });
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <Helmet>
+        <title>Latest News — Real-time Updates | DailyNews100</title>
+        <meta name="description" content="Read the latest news updates as they happen. Real-time news coverage of politics, sports, entertainment, technology, and business on DailyNews100." />
+        <link rel="canonical" href="https://dailynews100.com/latest" />
+        <meta property="og:title" content="Latest News — Real-time Updates | DailyNews100" />
+        <meta property="og:description" content="Read the latest news updates as they happen. Real-time news coverage of politics, sports, entertainment, technology, and business on DailyNews100." />
+        <meta property="og:url" content="https://dailynews100.com/latest" />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <Header />
       <main id="main-content" className="flex-1">
         {loading ? (

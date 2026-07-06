@@ -9,7 +9,11 @@ const Privacy = () => {
       <Helmet>
         <title>Privacy Policy | DailyNews100</title>
         <meta name="description" content="How DailyNews100 collects, uses and protects your personal information when you read the site, comment or contact us." />
-        <link rel="canonical" href="/privacy" />
+        <link rel="canonical" href="https://dailynews100.com/privacy" />
+        <meta property="og:title" content="Privacy Policy | DailyNews100" />
+        <meta property="og:description" content="How DailyNews100 collects, uses and protects your personal information when you read the site, comment or contact us." />
+        <meta property="og:url" content="https://dailynews100.com/privacy" />
+        <meta property="og:type" content="website" />
       </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">

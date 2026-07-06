@@ -9,7 +9,11 @@ const Terms = () => {
       <Helmet>
         <title>Terms of Use | DailyNews100</title>
         <meta name="description" content="The terms that govern your use of DailyNews100 — content rights, user conduct, comments, and limits of liability." />
-        <link rel="canonical" href="/terms" />
+        <link rel="canonical" href="https://dailynews100.com/terms" />
+        <meta property="og:title" content="Terms of Use | DailyNews100" />
+        <meta property="og:description" content="The terms that govern your use of DailyNews100 — content rights, user conduct, comments, and limits of liability." />
+        <meta property="og:url" content="https://dailynews100.com/terms" />
+        <meta property="og:type" content="website" />
       </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">

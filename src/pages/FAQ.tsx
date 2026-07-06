@@ -62,10 +62,10 @@ export default function FAQ() {
       <Helmet>
         <title>FAQ — Frequently Asked Questions | DailyNews100</title>
         <meta name="description" content="Answers to common questions about DailyNews100: how we report the news, comment moderation, privacy, advertising and republishing policies." />
-        <link rel="canonical" href="/faq" />
+        <link rel="canonical" href="https://dailynews100.com/faq" />
         <meta property="og:title" content="FAQ — DailyNews100" />
         <meta property="og:description" content="Everything you need to know about DailyNews100." />
-        <meta property="og:url" content="/faq" />
+        <meta property="og:url" content="https://dailynews100.com/faq" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 

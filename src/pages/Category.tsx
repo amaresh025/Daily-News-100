@@ -87,10 +87,10 @@ const Category = () => {
           <title>{meta.metaTitle}</title>
           <meta name="description" content={meta.metaDescription} />
           <meta name="keywords" content={meta.keywords.join(', ')} />
-          <link rel="canonical" href={`/category/${slug}`} />
+          <link rel="canonical" href={`https://dailynews100.com/category/${slug}`} />
           <meta property="og:title" content={meta.metaTitle} />
           <meta property="og:description" content={meta.metaDescription} />
-          <meta property="og:url" content={`/category/${slug}`} />
+          <meta property="og:url" content={`https://dailynews100.com/category/${slug}`} />
         </Helmet>
       )}
       <Header />

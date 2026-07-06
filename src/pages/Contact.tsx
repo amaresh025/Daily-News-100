@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { MessageSquare, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { Helmet } from 'react-helmet-async';
 
 const schema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100),
@@ -48,6 +49,15 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Contact Us — Get in Touch | DailyNews100</title>
+        <meta name="description" content="Contact DailyNews100. Reach out to our editorial team, report errors, submit tips, or send feedback." />
+        <link rel="canonical" href="https://dailynews100.com/contact" />
+        <meta property="og:title" content="Contact Us — Get in Touch | DailyNews100" />
+        <meta property="og:description" content="Contact DailyNews100. Reach out to our editorial team, report errors, submit tips, or send feedback." />
+        <meta property="og:url" content="https://dailynews100.com/contact" />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">
         <div className="max-w-4xl mx-auto">

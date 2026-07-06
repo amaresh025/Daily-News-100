@@ -11,7 +11,11 @@ const About = () => {
       <Helmet>
         <title>About DailyNews100 — Who We Are</title>
         <meta name="description" content="DailyNews100 is a global digital news portal delivering fast, fact-checked stories across politics, business, sports, entertainment, technology and health." />
-        <link rel="canonical" href="/about" />
+        <link rel="canonical" href="https://dailynews100.com/about" />
+        <meta property="og:title" content="About DailyNews100 — Who We Are" />
+        <meta property="og:description" content="DailyNews100 is a global digital news portal delivering fast, fact-checked stories across politics, business, sports, entertainment, technology and health." />
+        <meta property="og:url" content="https://dailynews100.com/about" />
+        <meta property="og:type" content="website" />
       </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">
