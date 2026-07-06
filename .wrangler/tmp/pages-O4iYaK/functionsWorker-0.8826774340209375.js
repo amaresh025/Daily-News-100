@@ -21638,7 +21638,7 @@ var onRequest = /* @__PURE__ */ __name(async (context) => {
   }
 }, "onRequest");
 
-// ../.wrangler/tmp/pages-uBsEzm/functionsRoutes-0.503130428679377.mjs
+// ../.wrangler/tmp/pages-O4iYaK/functionsRoutes-0.3494866747600721.mjs
 var routes = [
   {
     routePath: "/:sitemap",
