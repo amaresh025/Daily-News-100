@@ -21756,10 +21756,17 @@ var onRequest = /* @__PURE__ */ __name2(async (context) => {
   const isIndex = sitemapParam === "sitemap-index.xml";
   const pageNumStr = match2[2];
   const pageNum = pageNumStr ? parseInt(pageNumStr, 10) : null;
-  const supabaseUrl = context.env.VITE_SUPABASE_URL || context.env.SUPABASE_URL;
-  const supabaseKey = context.env.VITE_SUPABASE_PUBLISHABLE_KEY || context.env.SUPABASE_ANON_KEY || context.env.SUPABASE_PUBLISHABLE_KEY;
+  const supabaseUrl = context.env.SUPABASE_URL || context.env.VITE_SUPABASE_URL;
+  const supabaseKey = context.env.SUPABASE_SERVICE_ROLE_KEY || context.env.SUPABASE_ANON_KEY || context.env.VITE_SUPABASE_ANON_KEY || context.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!supabaseUrl || !supabaseKey) {
-    return new Response("Supabase configuration missing on Cloudflare environment.", { status: 500 });
+    const missing = [];
+    if (!supabaseUrl) {
+      missing.push("SUPABASE_URL / VITE_SUPABASE_URL");
+    }
+    if (!supabaseKey) {
+      missing.push("SUPABASE_SERVICE_ROLE_KEY / SUPABASE_ANON_KEY / VITE_SUPABASE_ANON_KEY");
+    }
+    return new Response(`Missing environment variables: ${missing.join(" and ")}`, { status: 500 });
   }
   const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {

@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// ../.wrangler/tmp/bundle-jpt5jA/checked-fetch.js
+// ../.wrangler/tmp/bundle-JMD23t/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -21465,10 +21465,17 @@ var onRequest = /* @__PURE__ */ __name(async (context) => {
   const isIndex = sitemapParam === "sitemap-index.xml";
   const pageNumStr = match2[2];
   const pageNum = pageNumStr ? parseInt(pageNumStr, 10) : null;
-  const supabaseUrl = context.env.VITE_SUPABASE_URL || context.env.SUPABASE_URL;
-  const supabaseKey = context.env.VITE_SUPABASE_PUBLISHABLE_KEY || context.env.SUPABASE_ANON_KEY || context.env.SUPABASE_PUBLISHABLE_KEY;
+  const supabaseUrl = context.env.SUPABASE_URL || context.env.VITE_SUPABASE_URL;
+  const supabaseKey = context.env.SUPABASE_SERVICE_ROLE_KEY || context.env.SUPABASE_ANON_KEY || context.env.VITE_SUPABASE_ANON_KEY || context.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!supabaseUrl || !supabaseKey) {
-    return new Response("Supabase configuration missing on Cloudflare environment.", { status: 500 });
+    const missing = [];
+    if (!supabaseUrl) {
+      missing.push("SUPABASE_URL / VITE_SUPABASE_URL");
+    }
+    if (!supabaseKey) {
+      missing.push("SUPABASE_SERVICE_ROLE_KEY / SUPABASE_ANON_KEY / VITE_SUPABASE_ANON_KEY");
+    }
+    return new Response(`Missing environment variables: ${missing.join(" and ")}`, { status: 500 });
   }
   const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {
@@ -22113,7 +22120,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-jpt5jA/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-JMD23t/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -22145,7 +22152,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// ../.wrangler/tmp/bundle-jpt5jA/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-JMD23t/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

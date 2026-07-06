@@ -2,11 +2,12 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../src/integrations/supabase/types';
 
 interface Env {
-  VITE_SUPABASE_URL?: string;
-  VITE_SUPABASE_PUBLISHABLE_KEY?: string;
   SUPABASE_URL?: string;
+  VITE_SUPABASE_URL?: string;
+  SUPABASE_SERVICE_ROLE_KEY?: string;
   SUPABASE_ANON_KEY?: string;
-  SUPABASE_PUBLISHABLE_KEY?: string;
+  VITE_SUPABASE_ANON_KEY?: string;
+  VITE_SUPABASE_PUBLISHABLE_KEY?: string;
 }
 
 function escapeXml(unsafe: string): string {
@@ -101,12 +102,24 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   const pageNumStr = match[2];
   const pageNum = pageNumStr ? parseInt(pageNumStr, 10) : null;
 
-  // Supabase connection keys configuration
-  const supabaseUrl = context.env.VITE_SUPABASE_URL || context.env.SUPABASE_URL;
-  const supabaseKey = context.env.VITE_SUPABASE_PUBLISHABLE_KEY || context.env.SUPABASE_ANON_KEY || context.env.SUPABASE_PUBLISHABLE_KEY;
+  // Supabase connection keys configuration with correct priority:
+  // URL: SUPABASE_URL -> VITE_SUPABASE_URL
+  // Key: SUPABASE_SERVICE_ROLE_KEY -> SUPABASE_ANON_KEY -> VITE_SUPABASE_ANON_KEY -> VITE_SUPABASE_PUBLISHABLE_KEY (fallback)
+  const supabaseUrl = context.env.SUPABASE_URL || context.env.VITE_SUPABASE_URL;
+  const supabaseKey = context.env.SUPABASE_SERVICE_ROLE_KEY || 
+                      context.env.SUPABASE_ANON_KEY || 
+                      context.env.VITE_SUPABASE_ANON_KEY ||
+                      context.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    return new Response("Supabase configuration missing on Cloudflare environment.", { status: 500 });
+    const missing: string[] = [];
+    if (!supabaseUrl) {
+      missing.push('SUPABASE_URL / VITE_SUPABASE_URL');
+    }
+    if (!supabaseKey) {
+      missing.push('SUPABASE_SERVICE_ROLE_KEY / SUPABASE_ANON_KEY / VITE_SUPABASE_ANON_KEY');
+    }
+    return new Response(`Missing environment variables: ${missing.join(' and ')}`, { status: 500 });
   }
 
   const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
