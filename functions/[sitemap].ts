@@ -106,10 +106,58 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   // URL: SUPABASE_URL -> VITE_SUPABASE_URL
   // Key: SUPABASE_SERVICE_ROLE_KEY -> SUPABASE_ANON_KEY -> VITE_SUPABASE_ANON_KEY -> VITE_SUPABASE_PUBLISHABLE_KEY (fallback)
   const supabaseUrl = context.env.SUPABASE_URL || context.env.VITE_SUPABASE_URL;
-  const supabaseKey = context.env.SUPABASE_SERVICE_ROLE_KEY || 
-                      context.env.SUPABASE_ANON_KEY || 
-                      context.env.VITE_SUPABASE_ANON_KEY ||
-                      context.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+  let urlProjectRef: string | null = null;
+  if (supabaseUrl) {
+    const urlMatch = supabaseUrl.match(/https:\/\/([^.]+)\.supabase\./);
+    if (urlMatch) {
+      urlProjectRef = urlMatch[1];
+    }
+  }
+
+  // Helper to extract project ref from JWT payload
+  const getJwtProjectRef = (token: string | undefined): string | null => {
+    if (!token) return null;
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      const base64Url = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64Url));
+      return payload.ref || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const keyCandidates = [
+    { name: 'SUPABASE_SERVICE_ROLE_KEY', val: context.env.SUPABASE_SERVICE_ROLE_KEY },
+    { name: 'SUPABASE_ANON_KEY', val: context.env.SUPABASE_ANON_KEY },
+    { name: 'VITE_SUPABASE_ANON_KEY', val: context.env.VITE_SUPABASE_ANON_KEY },
+    { name: 'VITE_SUPABASE_PUBLISHABLE_KEY', val: context.env.VITE_SUPABASE_PUBLISHABLE_KEY }
+  ];
+
+  let supabaseKey: string | undefined;
+  for (const candidate of keyCandidates) {
+    if (!candidate.val) continue;
+    const tokenRef = getJwtProjectRef(candidate.val);
+    
+    // If a project ref is parsed from the URL, prioritize matching keys to filter out mismatched global system envs
+    if (urlProjectRef && tokenRef && tokenRef !== urlProjectRef) {
+      continue;
+    }
+    supabaseKey = candidate.val;
+    break;
+  }
+
+  // Fallback: If no project-matched key is found, fall back to the first defined key
+  if (!supabaseKey) {
+    for (const candidate of keyCandidates) {
+      if (candidate.val) {
+        supabaseKey = candidate.val;
+        break;
+      }
+    }
+  }
 
   if (!supabaseUrl || !supabaseKey) {
     const missing: string[] = [];
@@ -145,7 +193,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       .lte('published_at', new Date().toISOString());
 
     if (countErr) {
-      return new Response(`Error querying posts count: ${countErr.message}`, { status: 500 });
+      return new Response(`Error querying posts count: ${JSON.stringify(countErr)}`, { status: 500 });
     }
 
     const { data: categories, error: catErr } = await supabase

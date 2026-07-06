@@ -1,0 +1,13 @@
+{
+  "routes": [
+    {
+      "routePath": "/:sitemap",
+      "mountPath": "/",
+      "method": "",
+      "module": [
+        "[sitemap].ts:onRequest"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}
