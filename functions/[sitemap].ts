@@ -117,7 +117,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       missing.push('SUPABASE_URL / VITE_SUPABASE_URL');
     }
     if (!supabaseKey) {
-      missing.push('SUPABASE_SERVICE_ROLE_KEY / SUPABASE_ANON_KEY / VITE_SUPABASE_ANON_KEY');
+      missing.push('SUPABASE_SERVICE_ROLE_KEY / SUPABASE_ANON_KEY / VITE_SUPABASE_ANON_KEY / VITE_SUPABASE_PUBLISHABLE_KEY');
     }
     return new Response(`Missing environment variables: ${missing.join(' and ')}`, { status: 500 });
   }
