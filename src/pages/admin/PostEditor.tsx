@@ -8,9 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import ImageUpload from '@/components/admin/ImageUpload';
-import RichTextEditor from '@/components/admin/RichTextEditor';
+import HtmlEditor from '@/components/admin/HtmlEditor';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Eye } from 'lucide-react';
 
 const MAIN_CATEGORY_SLUGS = ['politics', 'accidents', 'business', 'sports', 'entertainment', 'technology', 'health'];
 
@@ -26,7 +26,6 @@ const empty: FormState = {
   author_name: 'DailyNews100 Desk', category_id: '', extra_category_ids: [], status: 'draft',
   is_breaking: false, is_trending: false, meta_title: '', meta_description: '',
 };
-
 
 const slugify = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80);
 
@@ -59,8 +58,47 @@ export default function PostEditor() {
         setLoading(false);
       });
     }
-
   }, [id, isNew]);
+
+  const handlePreview = async () => {
+    if (!form.title || !form.content) {
+      return toast({ title: 'Title and content required to preview', variant: 'destructive' });
+    }
+    setBusy(true);
+    const payload = {
+      ...form,
+      slug: form.slug || slugify(form.title),
+      category_id: form.category_id || null,
+      extra_category_ids: form.extra_category_ids.filter(x => x && x !== form.category_id),
+      featured_image: form.featured_image || null,
+      meta_title: form.meta_title || null,
+      meta_description: form.meta_description || null,
+    };
+
+    let savedPost: { id: string; slug: string } | null = null;
+    try {
+      if (isNew) {
+        const { data, error } = await supabase.from('posts').insert(payload).select('id, slug').maybeSingle();
+        if (error) throw error;
+        if (data) {
+          savedPost = data;
+          navigate(`/admin/posts/${data.id}`, { replace: true });
+        }
+      } else {
+        const { data, error } = await supabase.from('posts').update(payload).eq('id', id).select('id, slug').maybeSingle();
+        if (error) throw error;
+        if (data) savedPost = data;
+      }
+      
+      toast({ title: 'Draft saved. Opening preview...' });
+      const previewSlug = savedPost?.slug || form.slug || slugify(form.title);
+      window.open(`/blog/${previewSlug}?preview=true`, '_blank');
+    } catch (err: any) {
+      toast({ title: 'Preview failed', description: err.message, variant: 'destructive' });
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,8 +121,7 @@ export default function PostEditor() {
     setBusy(false);
     if (res.error) return toast({ title: 'Save failed', description: res.error.message, variant: 'destructive' });
     toast({ title: isNew ? 'Post created' : 'Post updated' });
-    // Keep navbar selection in sync with what was chosen in editor.
-    // After save, open the public category page for the selected main category.
+    
     if (form.category_id) {
       const { data: chosen } = await supabase
         .from('categories')
@@ -102,90 +139,105 @@ export default function PostEditor() {
 
   return (
     <AdminLayout>
-      <div className="flex items-center gap-3 mb-6">
-        <Button asChild variant="ghost" size="sm"><Link to="/admin/posts"><ArrowLeft className="h-4 w-4 mr-1" />Back</Link></Button>
-        <h1 className="text-3xl font-extrabold">{isNew ? 'New Post' : 'Edit Post'}</h1>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="sm"><Link to="/admin/posts"><ArrowLeft className="h-4 w-4 mr-1" />Back</Link></Button>
+          <h1 className="text-3xl font-extrabold">{isNew ? 'New Post' : 'Edit Post'}</h1>
+        </div>
+        <Button type="button" variant="outline" onClick={handlePreview} disabled={busy} className="gap-2">
+          <Eye className="h-4 w-4" /> Preview Article
+        </Button>
       </div>
-      <form onSubmit={save} className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-4">
-          <div className="space-y-2"><Label>Title *</Label>
-            <Input value={form.title} maxLength={200} required
-              onChange={e => setForm(f => ({ ...f, title: e.target.value, slug: f.slug || slugify(e.target.value) }))} />
-          </div>
-          <div className="space-y-2"><Label>Slug</Label>
-            <Input value={form.slug} maxLength={120} onChange={e => setForm(f => ({ ...f, slug: slugify(e.target.value) }))} />
-          </div>
-          <div className="space-y-2"><Label>Excerpt</Label>
-            <Textarea rows={2} maxLength={300} value={form.excerpt} onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))} />
-          </div>
-          <div className="space-y-2"><Label>Content *</Label>
-            <RichTextEditor value={form.content} onChange={html => setForm(f => ({ ...f, content: html }))} placeholder="Write the article. Use the toolbar for headings, bold, lists, links, and images." />
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4 pt-4 border-t">
-            <div className="space-y-2"><Label>SEO Title</Label>
-              <Input value={form.meta_title} maxLength={70} onChange={e => setForm(f => ({ ...f, meta_title: e.target.value }))} />
+      <form onSubmit={save} className="space-y-6">
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="space-y-2"><Label>Title *</Label>
+              <Input value={form.title} maxLength={200} required
+                onChange={e => setForm(f => ({ ...f, title: e.target.value, slug: f.slug || slugify(e.target.value) }))} />
             </div>
-            <div className="space-y-2"><Label>SEO Description</Label>
-              <Input value={form.meta_description} maxLength={160} onChange={e => setForm(f => ({ ...f, meta_description: e.target.value }))} />
+            <div className="space-y-2"><Label>Slug</Label>
+              <Input value={form.slug} maxLength={120} onChange={e => setForm(f => ({ ...f, slug: slugify(e.target.value) }))} />
+            </div>
+            <div className="space-y-2"><Label>Excerpt</Label>
+              <Textarea rows={2} maxLength={300} value={form.excerpt} onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))} />
             </div>
           </div>
+
+          <aside className="space-y-4">
+            <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+              <Label>Status</Label>
+              <select className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value as 'draft' | 'published' }))}>
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" className="flex-1" onClick={handlePreview} disabled={busy}>Preview</Button>
+                <Button type="submit" className="flex-1" disabled={busy}>{busy ? 'Saving…' : 'Save Post'}</Button>
+              </div>
+            </div>
+
+            <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+              <Label>Featured Image</Label>
+              <ImageUpload value={form.featured_image || null} onChange={url => setForm(f => ({ ...f, featured_image: url ?? '' }))} />
+              <Input placeholder="…or paste image URL" value={form.featured_image}
+                onChange={e => setForm(f => ({ ...f, featured_image: e.target.value }))} />
+            </div>
+
+            <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+              <Label>Main Category</Label>
+              <select className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                value={form.category_id} onChange={e => setForm(f => ({ ...f, category_id: e.target.value }))}>
+                <option value="">— None —</option>
+                {mainCats.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+              <Label>Additional Categories (optional)</Label>
+              <div className="space-y-1 max-h-40 overflow-auto border border-border rounded-md p-2">
+                {otherCats.filter(c => c.id !== form.category_id).map(c => (
+                  <label key={c.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.extra_category_ids.includes(c.id)}
+                      onChange={e => setForm(f => ({
+                        ...f,
+                        extra_category_ids: e.target.checked
+                          ? [...f.extra_category_ids, c.id]
+                          : f.extra_category_ids.filter(x => x !== c.id),
+                      }))}
+                    />
+                    {c.name}
+                  </label>
+                ))}
+                {otherCats.length === 0 && <div className="text-xs text-muted-foreground">Add more categories to enable extras.</div>}
+              </div>
+              <Label>Author</Label>
+
+              <Input value={form.author_name} onChange={e => setForm(f => ({ ...f, author_name: e.target.value }))} />
+              <div className="flex items-center justify-between"><Label htmlFor="br">Breaking</Label>
+                <Switch id="br" checked={form.is_breaking} onCheckedChange={v => setForm(f => ({ ...f, is_breaking: v }))} />
+              </div>
+              <div className="flex items-center justify-between"><Label htmlFor="tr">Trending</Label>
+                <Switch id="tr" checked={form.is_trending} onCheckedChange={v => setForm(f => ({ ...f, is_trending: v }))} />
+              </div>
+            </div>
+          </aside>
         </div>
 
-        <aside className="space-y-4">
-          <div className="bg-card border border-border rounded-lg p-4 space-y-3">
-            <Label>Status</Label>
-            <select className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
-              value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value as 'draft' | 'published' }))}>
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
-            <Button type="submit" className="w-full" disabled={busy}>{busy ? 'Saving…' : 'Save Post'}</Button>
-          </div>
+        {/* HTML Editor with Live Preview (Full Width) */}
+        <div className="space-y-2 pt-6 border-t border-border">
+          <Label className="text-lg font-bold">Content *</Label>
+          <HtmlEditor value={form.content} onChange={html => setForm(f => ({ ...f, content: html }))} placeholder="Write the article in HTML format. Use formatting buttons above to insert HTML tags." />
+        </div>
 
-          <div className="bg-card border border-border rounded-lg p-4 space-y-3">
-            <Label>Featured Image</Label>
-            <ImageUpload value={form.featured_image || null} onChange={url => setForm(f => ({ ...f, featured_image: url ?? '' }))} />
-            <Input placeholder="…or paste image URL" value={form.featured_image}
-              onChange={e => setForm(f => ({ ...f, featured_image: e.target.value }))} />
+        {/* SEO Fields */}
+        <div className="grid sm:grid-cols-2 gap-4 pt-6 border-t border-border">
+          <div className="space-y-2"><Label>SEO Title</Label>
+            <Input value={form.meta_title} maxLength={70} onChange={e => setForm(f => ({ ...f, meta_title: e.target.value }))} />
           </div>
-
-          <div className="bg-card border border-border rounded-lg p-4 space-y-3">
-            <Label>Main Category</Label>
-            <select className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
-              value={form.category_id} onChange={e => setForm(f => ({ ...f, category_id: e.target.value }))}>
-              <option value="">— None —</option>
-              {mainCats.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
-            <Label>Additional Categories (optional)</Label>
-            <div className="space-y-1 max-h-40 overflow-auto border border-border rounded-md p-2">
-              {otherCats.filter(c => c.id !== form.category_id).map(c => (
-                <label key={c.id} className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={form.extra_category_ids.includes(c.id)}
-                    onChange={e => setForm(f => ({
-                      ...f,
-                      extra_category_ids: e.target.checked
-                        ? [...f.extra_category_ids, c.id]
-                        : f.extra_category_ids.filter(x => x !== c.id),
-                    }))}
-                  />
-                  {c.name}
-                </label>
-              ))}
-              {otherCats.length === 0 && <div className="text-xs text-muted-foreground">Add more categories to enable extras.</div>}
-            </div>
-            <Label>Author</Label>
-
-            <Input value={form.author_name} onChange={e => setForm(f => ({ ...f, author_name: e.target.value }))} />
-            <div className="flex items-center justify-between"><Label htmlFor="br">Breaking</Label>
-              <Switch id="br" checked={form.is_breaking} onCheckedChange={v => setForm(f => ({ ...f, is_breaking: v }))} />
-            </div>
-            <div className="flex items-center justify-between"><Label htmlFor="tr">Trending</Label>
-              <Switch id="tr" checked={form.is_trending} onCheckedChange={v => setForm(f => ({ ...f, is_trending: v }))} />
-            </div>
+          <div className="space-y-2"><Label>SEO Description</Label>
+            <Input value={form.meta_description} maxLength={160} onChange={e => setForm(f => ({ ...f, meta_description: e.target.value }))} />
           </div>
-        </aside>
+        </div>
       </form>
     </AdminLayout>
   );

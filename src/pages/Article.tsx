@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -20,11 +20,13 @@ interface Article extends PostRow {
 
 interface ExtraCat { id: string; name: string; slug: string; }
 
-const readingTime = (txt: string) => Math.max(1, Math.round(txt.replace(/<[^>]+>/g, '').split(/\s+/).length / 220));
+const readingTime = (txt: string) => Math.max(1, Math.round((txt || '').replace(/<[^>]+>/g, '').split(/\s+/).length / 220));
 
 export default function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isPreview = searchParams.get('preview') === 'true';
   const [post, setPost] = useState<Article | null>(null);
   const [extraCats, setExtraCats] = useState<ExtraCat[]>([]);
   const [related, setRelated] = useState<PostRow[]>([]);
@@ -44,9 +46,40 @@ export default function ArticlePage() {
     setLoading(true);
 
     (async () => {
-      const { data } = await supabase.from('posts')
+      // Secure Preview Mode Check: only admins can view drafts/previews
+      if (isPreview) {
+        let isAdmin = false;
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data: roleData } = await supabase
+              .from('user_roles')
+              .select('role')
+              .eq('user_id', user.id)
+              .eq('role', 'admin')
+              .maybeSingle();
+            isAdmin = !!roleData;
+          }
+        } catch (e) {
+          console.error('Auth error during preview check:', e);
+        }
+
+        if (!isAdmin) {
+          setNotFound(true);
+          setLoading(false);
+          return;
+        }
+      }
+
+      let query = supabase.from('posts')
         .select('*, categories(id,name,slug)')
-        .eq('slug', slug).eq('status', 'published').maybeSingle();
+        .eq('slug', slug);
+
+      if (!isPreview) {
+        query = query.eq('status', 'published');
+      }
+
+      const { data } = await query.maybeSingle();
       if (!data) { setNotFound(true); setLoading(false); return; }
       setPost(data as Article);
       setLoading(false);
@@ -57,7 +90,11 @@ export default function ArticlePage() {
       } else {
         setExtraCats([]);
       }
-      supabase.from('posts').update({ views: (data.views ?? 0) + 1 }).eq('id', data.id).then(() => {});
+      
+      if (!isPreview) {
+        supabase.from('posts').update({ views: (data.views ?? 0) + 1 }).eq('id', data.id).then(() => {});
+      }
+      
       if (data.category_id) {
         const { data: rel } = await supabase.from('posts')
           .select('id,title,slug,excerpt,featured_image,author_name,is_breaking,is_trending,views,published_at,category_id, categories(id,name,slug)')
@@ -65,7 +102,7 @@ export default function ArticlePage() {
         setRelated((rel as PostRow[]) ?? []);
       }
     })();
-  }, [slug]);
+  }, [slug, isPreview]);
 
   if (loading) return <ArticleSkeleton />;
   if (notFound || !post) return (

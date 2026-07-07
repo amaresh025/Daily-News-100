@@ -16,6 +16,7 @@ const Latest = lazy(() => import("./pages/Latest"));
 const Category = lazy(() => import("./pages/Category"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
+const Disclaimer = lazy(() => import("./pages/Disclaimer"));
 const SearchResults = lazy(() => import("./pages/SearchResults"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -66,6 +67,7 @@ const App = () => {
                     <Route path="/category/:slug" element={<Category key={`cat-${refreshKey}`} />} />
                     <Route path="/terms" element={<Terms />} />
                     <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/disclaimer" element={<Disclaimer />} />
                     <Route path="/search" element={<SearchResults key={`search-${refreshKey}`} />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />

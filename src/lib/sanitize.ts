@@ -12,10 +12,14 @@ export function sanitizeHtml(dirty: string): string {
       'code', 'pre', 'hr',
       'table', 'thead', 'tbody', 'tr', 'th', 'td',
       'span', 'div', 'figure', 'figcaption',
+      'b', 'i', 'iframe'
     ],
-    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'target', 'rel', 'class', 'width', 'height', 'style'],
+    ALLOWED_ATTR: [
+      'href', 'src', 'alt', 'title', 'target', 'rel', 'class', 'width', 'height', 'style',
+      'frameborder', 'allow', 'allowfullscreen', 'sandbox'
+    ],
     ALLOW_DATA_ATTR: false,
-    FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input'],
+    FORBID_TAGS: ['script', 'style', 'object', 'embed', 'form', 'input'],
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'style'],
   });
 }
