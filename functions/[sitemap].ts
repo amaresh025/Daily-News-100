@@ -1,3 +1,4 @@
+/// <reference path="./global.d.ts" />
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../src/integrations/supabase/types';
 
