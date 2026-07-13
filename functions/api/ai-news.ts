@@ -40,6 +40,26 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     );
   }
 
+  // Parse and validate limit query parameter
+  const url = new URL(context.request.url);
+  const limitParam = url.searchParams.get('limit');
+  let limit = 6;
+
+  if (limitParam !== null) {
+    if (/^\d+$/.test(limitParam)) {
+      const parsed = parseInt(limitParam, 10);
+      if (parsed > 20) {
+        limit = 20;
+      } else if (parsed < 1) {
+        limit = 6;
+      } else {
+        limit = parsed;
+      }
+    } else {
+      limit = 6;
+    }
+  }
+
   // Supabase connection configuration following the existing pattern from [sitemap].ts
   const supabaseUrl = context.env.SUPABASE_URL || context.env.VITE_SUPABASE_URL;
 
@@ -153,7 +173,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       );
     }
 
-    // 2. Fetch up to 6 published posts in the AI category
+    // 2. Fetch up to dynamic limit of published posts in the AI category
     const { data: posts, error: postsErr } = await supabase
       .from('posts')
       .select('id, title, excerpt, featured_image, slug, published_at')
@@ -161,7 +181,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       .or(`category_id.eq.${category.id},extra_category_ids.cs.{${category.id}}`)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
-      .limit(6);
+      .limit(limit);
 
     if (postsErr) {
       return new Response(
