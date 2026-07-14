@@ -24,10 +24,10 @@ function escapeXml(unsafe: string): string {
   });
 }
 
-function formatIsoDate(dateStr: string | null | undefined, fallbackDate: string = '2026-07-13T00:00:00.000Z'): string {
+function formatIsoDate(dateStr: string | null | undefined, fallbackDate: string = '2026-07-13T00:00:00Z'): string {
   if (!dateStr) return fallbackDate;
   try {
-    return new Date(dateStr).toISOString();
+    return new Date(dateStr).toISOString().split('.')[0] + 'Z';
   } catch (e) {
     return fallbackDate;
   }
@@ -234,7 +234,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       .limit(1)
       .maybeSingle();
 
-    const defaultFallbackDate = '2026-07-13T00:00:00.000Z';
+    const defaultFallbackDate = '2026-07-13T00:00:00Z';
     const latestDbDate = latestPost ? (latestPost.updated_at || latestPost.published_at || defaultFallbackDate) : defaultFallbackDate;
 
     // Handle sitemap index request (or regular sitemap.xml request when total > 50,000)
