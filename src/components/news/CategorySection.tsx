@@ -21,7 +21,7 @@ const CategorySection = ({ title, slug }: CategorySectionProps) => {
     <section className="container-blog py-10" aria-labelledby={`${slug}-heading`}>
       <div className="flex items-end justify-between mb-6 border-b-2 border-border">
         <h2 id={`${slug}-heading`} className="text-2xl md:text-3xl font-extrabold uppercase tracking-tight pb-3 border-b-4 border-primary -mb-[2px]">
-          {title}
+          <Link to={`/category/${slug}`} className="hover:text-primary transition-colors">{title}</Link>
         </h2>
         <Link to={`/category/${slug}`} className="text-sm font-semibold text-primary hover:underline flex items-center gap-1 pb-3">
           View all <ArrowRight className="h-3.5 w-3.5" />

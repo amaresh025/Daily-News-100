@@ -206,6 +206,11 @@ export default function ArticlePage() {
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-y border-border py-3">
             <span className="flex items-center gap-1"><UserIcon className="h-4 w-4" /> {post.author_name}</span>
             <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {new Date(published).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+            {post.updated_at && new Date(post.updated_at).toDateString() !== new Date(published).toDateString() && (
+              <span className="flex items-center gap-1 text-primary/80 font-medium">
+                · Updated: {new Date(post.updated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </span>
+            )}
             <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> {readingTime(post.content)} min read</span>
           </div>
         </div>

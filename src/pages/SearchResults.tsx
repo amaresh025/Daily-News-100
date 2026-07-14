@@ -113,7 +113,7 @@ const SearchResults = () => {
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground px-4 py-2">Suggestions</p>
               {suggestions.map(s => (
                 <Link key={s.id} to={`/blog/${s.slug}`} className="flex items-center gap-3 px-4 py-3 hover:bg-muted/60 transition-colors">
-                  {s.featured_image && <img src={s.featured_image} alt="" className="w-14 h-10 rounded object-cover shrink-0" />}
+                  {s.featured_image && <img src={s.featured_image} alt={s.title} className="w-14 h-10 rounded object-cover shrink-0" />}
                   <div className="min-w-0">
                     <p className="text-sm font-semibold line-clamp-1">{s.title}</p>
                     {s.categories && <p className="text-xs text-muted-foreground">{s.categories.name}</p>}
@@ -137,7 +137,7 @@ const SearchResults = () => {
                   <div className="space-y-4">
                     {results.map(r => (
                       <Link key={r.id} to={`/blog/${r.slug}`} className="flex gap-4 p-4 bg-card border border-border rounded-lg hover:border-primary transition-colors">
-                        {r.featured_image && <img src={r.featured_image} alt="" className="w-32 h-24 rounded object-cover shrink-0" />}
+                        {r.featured_image && <img src={r.featured_image} alt={r.title} className="w-32 h-24 rounded object-cover shrink-0" />}
                         <div className="min-w-0">
                           {r.categories && <span className="badge-category text-[10px]">{r.categories.name}</span>}
                           <h2 className="text-lg font-bold mt-1 line-clamp-2">{r.title}</h2>
