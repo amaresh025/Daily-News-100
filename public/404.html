@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found | DailyNews100</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --border: 214.3 31.8% 91.4%;
+        --primary: 24 100% 50%;
+        --primary-foreground: 0 0% 100%;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --background: 222.2 84% 4.9%;
+          --foreground: 210 40% 98%;
+          --muted-foreground: 215 20.2% 65.1%;
+          --border: 217.2 32.6% 17.5%;
+        }
+      }
+      body {
+        margin: 0;
+        font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        box-sizing: border-box;
+      }
+      header {
+        border-b: 1px solid hsl(var(--border));
+        height: 64px;
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      }
+      .logo {
+        font-size: 1.25rem;
+        font-weight: 800;
+        text-decoration: none;
+        color: hsl(var(--foreground));
+        display: flex;
+        align-items: center;
+      }
+      .logo span {
+        color: hsl(var(--primary));
+      }
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 4rem 1rem;
+        box-sizing: border-box;
+      }
+      .container {
+        max-width: 42rem;
+        margin: 0 auto;
+      }
+      .code {
+        font-size: 6rem;
+        font-weight: 800;
+        line-height: 1;
+        color: hsla(var(--foreground), 0.15);
+        margin: 0 0 2rem 0;
+        user-select: none;
+      }
+      @media (min-width: 768px) {
+        .code {
+          font-size: 8rem;
+        }
+      }
+      h2 {
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin: 0 0 1rem 0;
+      }
+      @media (min-width: 768px) {
+        h2 {
+          font-size: 2.25rem;
+        }
+      }
+      .desc {
+        font-size: 1.125rem;
+        color: hsl(var(--muted-foreground));
+        margin: 0 auto 2rem auto;
+        max-width: 32rem;
+        line-height: 1.625;
+      }
+      .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+      }
+      @media (min-width: 640px) {
+        .actions {
+          flex-direction: row;
+        }
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        height: 3rem;
+        padding: 0 2rem;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: background-color 0.15s ease-in-out;
+        cursor: pointer;
+        box-sizing: border-box;
+      }
+      .btn-primary {
+        background-color: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+      }
+      .btn-primary:hover {
+        background-color: hsl(24, 100%, 45%);
+      }
+      .btn-outline {
+        border: 1px solid hsl(var(--border));
+        background-color: transparent;
+        color: hsl(var(--foreground));
+      }
+      .btn-outline:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      @media (prefers-color-scheme: dark) {
+        .btn-outline:hover {
+          background-color: rgba(255, 255, 255, 0.05);
+        }
+      }
+      .links-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid hsl(var(--border));
+      }
+      .links-title {
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+        margin: 0 0 1rem 0;
+      }
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+        font-size: 0.875rem;
+      }
+      .links a {
+        color: hsl(var(--foreground));
+        text-decoration: none;
+        transition: color 0.15s ease-in-out;
+      }
+      .links a:hover {
+        color: hsl(var(--primary));
+      }
+      footer {
+        border-t: 1px solid hsl(var(--border));
+        padding: 2rem;
+        text-align: center;
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="logo">DailyNews<span>100</span></a>
+    </header>
+
+    <main>
+      <div class="container">
+        <h1 class="code">404</h1>
+        <h2>Page Not Found</h2>
+        <p class="desc">
+          Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or the URL was mistyped.
+        </p>
+        <div class="actions">
+          <a href="/" class="btn btn-primary">Return to Home</a>
+          <a href="/latest" class="btn btn-outline">Browse Latest News</a>
+        </div>
+        <div class="links-section">
+          <p class="links-title">You might be looking for:</p>
+          <div class="links">
+            <a href="/">Homepage</a>
+            <a href="/latest">Latest News</a>
+            <a href="/category/business">Business Articles</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      &copy; 2026 DailyNews100. All rights reserved.
+    </footer>
+  </body>
+</html>

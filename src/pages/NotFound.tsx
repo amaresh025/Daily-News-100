@@ -41,8 +41,8 @@ const NotFound = () => {
             </Button>
             
             <Button variant="outline" asChild size="lg">
-              <Link to="/posts">
-                Browse All Posts
+              <Link to="/latest">
+                Browse Latest News
               </Link>
             </Button>
           </div>
@@ -56,10 +56,10 @@ const NotFound = () => {
               <Link to="/" className="text-foreground hover:text-primary transition-colors">
                 Homepage
               </Link>
-              <Link to="/posts" className="text-foreground hover:text-primary transition-colors">
-                All Posts
+              <Link to="/latest" className="text-foreground hover:text-primary transition-colors">
+                Latest News
               </Link>
-              <Link to="/business" className="text-foreground hover:text-primary transition-colors">
+              <Link to="/category/business" className="text-foreground hover:text-primary transition-colors">
                 Business Articles
               </Link>
             </div>
