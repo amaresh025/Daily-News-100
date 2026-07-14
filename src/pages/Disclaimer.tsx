@@ -12,6 +12,7 @@ const Disclaimer = () => {
         <title>Disclaimer | {siteName}</title>
         <meta name="description" content={`Disclaimer and terms of content for ${siteName}. Understand our reporting guidelines, accuracy commitments, editorial responsibility, and AI utilization policies.`} />
         <link rel="canonical" href={`https://dailynews100.com/disclaimer`} />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content={`Disclaimer | ${siteName}`} />
         <meta property="og:description" content={`Disclaimer and terms of content for ${siteName}. Understand our reporting guidelines, accuracy commitments, editorial responsibility, and AI utilization policies.`} />
         <meta property="og:url" content={`https://dailynews100.com/disclaimer`} />
@@ -85,6 +86,13 @@ const Disclaimer = () => {
       <Footer />
     </div>
   );
+};
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default Disclaimer;

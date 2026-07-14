@@ -10,6 +10,7 @@ const Privacy = () => {
         <title>Privacy Policy | DailyNews100</title>
         <meta name="description" content="How DailyNews100 collects, uses and protects your personal information when you read the site, comment or contact us." />
         <link rel="canonical" href="https://dailynews100.com/privacy" />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content="Privacy Policy | DailyNews100" />
         <meta property="og:description" content="How DailyNews100 collects, uses and protects your personal information when you read the site, comment or contact us." />
         <meta property="og:url" content="https://dailynews100.com/privacy" />
@@ -81,6 +82,13 @@ const Privacy = () => {
       <Footer />
     </div>
   );
+};
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default Privacy;

@@ -63,6 +63,7 @@ export default function FAQ() {
         <title>FAQ — Frequently Asked Questions | DailyNews100</title>
         <meta name="description" content="Answers to common questions about DailyNews100: how we report the news, comment moderation, privacy, advertising and republishing policies." />
         <link rel="canonical" href="https://dailynews100.com/faq" />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content="FAQ — DailyNews100" />
         <meta property="og:description" content="Everything you need to know about DailyNews100." />
         <meta property="og:url" content="https://dailynews100.com/faq" />
@@ -91,3 +92,10 @@ export default function FAQ() {
     </div>
   );
 }
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
+};

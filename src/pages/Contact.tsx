@@ -53,6 +53,7 @@ export default function Contact() {
         <title>Contact Us — Get in Touch | DailyNews100</title>
         <meta name="description" content="Contact DailyNews100. Reach out to our editorial team, report errors, submit tips, or send feedback." />
         <link rel="canonical" href="https://dailynews100.com/contact" />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content="Contact Us — Get in Touch | DailyNews100" />
         <meta property="og:description" content="Contact DailyNews100. Reach out to our editorial team, report errors, submit tips, or send feedback." />
         <meta property="og:url" content="https://dailynews100.com/contact" />
@@ -100,3 +101,10 @@ export default function Contact() {
     </div>
   );
 }
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
+};

@@ -12,6 +12,7 @@ const About = () => {
         <title>About DailyNews100 — Who We Are</title>
         <meta name="description" content="DailyNews100 is a global digital news portal delivering fast, fact-checked stories across politics, business, sports, entertainment, technology and health." />
         <link rel="canonical" href="https://dailynews100.com/about" />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content="About DailyNews100 — Who We Are" />
         <meta property="og:description" content="DailyNews100 is a global digital news portal delivering fast, fact-checked stories across politics, business, sports, entertainment, technology and health." />
         <meta property="og:url" content="https://dailynews100.com/about" />
@@ -82,6 +83,13 @@ const About = () => {
       <Footer />
     </div>
   );
+};
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default About;

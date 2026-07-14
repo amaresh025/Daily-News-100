@@ -15,6 +15,7 @@ const Index = () => {
         <title>DailyNews100 — Latest Breaking News, Politics, Business & Tech</title>
         <meta name="description" content="Stay updated with the latest news, breaking updates, politics, sports, business, technology, and health reports from around the world on DailyNews100." />
         <link rel="canonical" href="https://dailynews100.com" />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content="DailyNews100 — Latest Breaking News, Politics, Business & Tech" />
         <meta property="og:description" content="Stay updated with the latest news, breaking updates, politics, sports, business, technology, and health reports from around the world on DailyNews100." />
         <meta property="og:url" content="https://dailynews100.com" />
@@ -38,6 +39,13 @@ const Index = () => {
       <Footer />
     </div>
   );
+};
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default Index;

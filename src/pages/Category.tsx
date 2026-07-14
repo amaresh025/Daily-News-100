@@ -88,6 +88,7 @@ const Category = () => {
           <meta name="description" content={meta.metaDescription} />
           <meta name="keywords" content={meta.keywords.join(', ')} />
           <link rel="canonical" href={`https://dailynews100.com/category/${slug}`} />
+          <meta name="robots" content="index, follow" />
           <meta property="og:title" content={meta.metaTitle} />
           <meta property="og:description" content={meta.metaDescription} />
           <meta property="og:url" content={`https://dailynews100.com/category/${slug}`} />
@@ -132,6 +133,13 @@ const Category = () => {
       <Footer />
     </div>
   );
+};
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default Category;

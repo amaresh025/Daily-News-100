@@ -140,6 +140,7 @@ export default function ArticlePage() {
         <title>{title} | DailyNews100</title>
         <meta name="description" content={desc} />
         <link rel="canonical" href={url} />
+        <meta name="robots" content="index, follow" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={desc} />
@@ -212,3 +213,10 @@ export default function ArticlePage() {
     </div>
   );
 }
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
+};

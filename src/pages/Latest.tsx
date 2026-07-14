@@ -13,6 +13,7 @@ const Latest = () => {
         <title>Latest News — Real-time Updates | DailyNews100</title>
         <meta name="description" content="Read the latest news updates as they happen. Real-time news coverage of politics, sports, entertainment, technology, and business on DailyNews100." />
         <link rel="canonical" href="https://dailynews100.com/latest" />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content="Latest News — Real-time Updates | DailyNews100" />
         <meta property="og:description" content="Read the latest news updates as they happen. Real-time news coverage of politics, sports, entertainment, technology, and business on DailyNews100." />
         <meta property="og:url" content="https://dailynews100.com/latest" />
@@ -34,6 +35,13 @@ const Latest = () => {
       <Footer />
     </div>
   );
+};
+
+export const metadata = {
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default Latest;
