@@ -8,13 +8,18 @@ const Privacy = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Privacy Policy | DailyNews100</title>
-        <meta name="description" content="How DailyNews100 collects, uses and protects your personal information when you read the site, comment or contact us." />
+        <meta name="description" content="Read the DailyNews100 Privacy Policy. Learn how we collect, use, and protect your personal information when you browse our site, write comments, or contact us." />
         <link rel="canonical" href="https://dailynews100.com/privacy" />
         <meta name="robots" content="index, follow" />
         <meta property="og:title" content="Privacy Policy | DailyNews100" />
-        <meta property="og:description" content="How DailyNews100 collects, uses and protects your personal information when you read the site, comment or contact us." />
+        <meta property="og:description" content="Read the DailyNews100 Privacy Policy. Learn how we collect, use, and protect your personal information when you browse our site, write comments, or contact us." />
+        <meta property="og:image" content="https://dailynews100.com/placeholder.svg" />
         <meta property="og:url" content="https://dailynews100.com/privacy" />
         <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Privacy Policy | DailyNews100" />
+        <meta name="twitter:description" content="Read the DailyNews100 Privacy Policy. Learn how we collect, use, and protect your personal information when you browse our site, write comments, or contact us." />
+        <meta name="twitter:image" content="https://dailynews100.com/placeholder.svg" />
       </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">

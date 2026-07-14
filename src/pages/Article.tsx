@@ -119,20 +119,38 @@ export default function ArticlePage() {
   const published = post.published_at ?? new Date().toISOString();
 
   const jsonLd = {
-    '@context': 'https://schema.org', '@type': 'NewsArticle',
-    headline: post.title, image: img ? [img] : undefined, datePublished: published, dateModified: published,
-    author: { '@type': 'Person', name: post.author_name },
-    publisher: { '@type': 'Organization', name: 'DailyNews100', logo: { '@type': 'ImageObject', url: `https://dailynews100.com/favicon.ico` } },
-    description: desc, mainEntityOfPage: url,
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: post.title,
+    image: img ? [img] : ['https://dailynews100.com/placeholder.svg'],
+    datePublished: published,
+    dateModified: post.updated_at || published,
+    author: {
+      '@type': 'Person',
+      name: post.author_name || 'DailyNews100 Staff',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'DailyNews100',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://dailynews100.com/logo.png',
+      },
+    },
+    description: desc,
+    mainEntityOfPage: url,
   };
   const crumbs = {
-    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://dailynews100.com' },
       ...(post.categories ? [{ '@type': 'ListItem', position: 2, name: post.categories.name, item: `https://dailynews100.com/category/${post.categories.slug}` }] : []),
       { '@type': 'ListItem', position: post.categories ? 3 : 2, name: post.title, item: url },
     ],
   };
+
+  const shareImg = img || 'https://dailynews100.com/placeholder.svg';
 
   return (
     <div className="min-h-screen bg-background">
@@ -145,11 +163,11 @@ export default function ArticlePage() {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={desc} />
         <meta property="og:url" content={url} />
-        {img && <meta property="og:image" content={img} />}
+        <meta property="og:image" content={shareImg} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={desc} />
-        {img && <meta name="twitter:image" content={img} />}
+        <meta name="twitter:image" content={shareImg} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(crumbs)}</script>
       </Helmet>

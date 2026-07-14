@@ -8,13 +8,18 @@ const Terms = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Terms of Use | DailyNews100</title>
-        <meta name="description" content="The terms that govern your use of DailyNews100 — content rights, user conduct, comments, and limits of liability." />
+        <meta name="description" content="Read the Terms of Use for DailyNews100. Understand the terms that govern your use of our site, including content rights, user conduct, comments, and liability." />
         <link rel="canonical" href="https://dailynews100.com/terms" />
         <meta name="robots" content="index, follow" />
         <meta property="og:title" content="Terms of Use | DailyNews100" />
-        <meta property="og:description" content="The terms that govern your use of DailyNews100 — content rights, user conduct, comments, and limits of liability." />
+        <meta property="og:description" content="Read the Terms of Use for DailyNews100. Understand the terms that govern your use of our site, including content rights, user conduct, comments, and liability." />
+        <meta property="og:image" content="https://dailynews100.com/placeholder.svg" />
         <meta property="og:url" content="https://dailynews100.com/terms" />
         <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Terms of Use | DailyNews100" />
+        <meta name="twitter:description" content="Read the Terms of Use for DailyNews100. Understand the terms that govern your use of our site, including content rights, user conduct, comments, and liability." />
+        <meta name="twitter:image" content="https://dailynews100.com/placeholder.svg" />
       </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">

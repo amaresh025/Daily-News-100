@@ -51,13 +51,18 @@ export default function Contact() {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Contact Us — Get in Touch | DailyNews100</title>
-        <meta name="description" content="Contact DailyNews100. Reach out to our editorial team, report errors, submit tips, or send feedback." />
+        <meta name="description" content="Get in touch with the DailyNews100 team. Reach out to our editorial desk to report errors, submit hot news tips, send feedback, or inquire about advertising." />
         <link rel="canonical" href="https://dailynews100.com/contact" />
         <meta name="robots" content="index, follow" />
         <meta property="og:title" content="Contact Us — Get in Touch | DailyNews100" />
-        <meta property="og:description" content="Contact DailyNews100. Reach out to our editorial team, report errors, submit tips, or send feedback." />
+        <meta property="og:description" content="Get in touch with the DailyNews100 team. Reach out to our editorial desk to report errors, submit hot news tips, send feedback, or inquire about advertising." />
+        <meta property="og:image" content="https://dailynews100.com/placeholder.svg" />
         <meta property="og:url" content="https://dailynews100.com/contact" />
         <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Us — Get in Touch | DailyNews100" />
+        <meta name="twitter:description" content="Get in touch with the DailyNews100 team. Reach out to our editorial desk to report errors, submit hot news tips, send feedback, or inquire about advertising." />
+        <meta name="twitter:image" content="https://dailynews100.com/placeholder.svg" />
       </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">

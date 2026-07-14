@@ -10,13 +10,18 @@ const Disclaimer = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Disclaimer | {siteName}</title>
-        <meta name="description" content={`Disclaimer and terms of content for ${siteName}. Understand our reporting guidelines, accuracy commitments, editorial responsibility, and AI utilization policies.`} />
+        <meta name="description" content={`Disclaimer and terms of content for ${siteName}. Learn about our strict reporting guidelines, accuracy commitments, editorial policies, and AI utilization.`} />
         <link rel="canonical" href={`https://dailynews100.com/disclaimer`} />
         <meta name="robots" content="index, follow" />
         <meta property="og:title" content={`Disclaimer | ${siteName}`} />
-        <meta property="og:description" content={`Disclaimer and terms of content for ${siteName}. Understand our reporting guidelines, accuracy commitments, editorial responsibility, and AI utilization policies.`} />
+        <meta property="og:description" content={`Disclaimer and terms of content for ${siteName}. Learn about our strict reporting guidelines, accuracy commitments, editorial policies, and AI utilization.`} />
+        <meta property="og:image" content="https://dailynews100.com/placeholder.svg" />
         <meta property="og:url" content={`https://dailynews100.com/disclaimer`} />
         <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`Disclaimer | ${siteName}`} />
+        <meta name="twitter:description" content={`Disclaimer and terms of content for ${siteName}. Learn about our strict reporting guidelines, accuracy commitments, editorial policies, and AI utilization.`} />
+        <meta name="twitter:image" content="https://dailynews100.com/placeholder.svg" />
       </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">

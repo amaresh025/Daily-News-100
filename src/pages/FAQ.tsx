@@ -61,12 +61,18 @@ export default function FAQ() {
     <div className="min-h-screen bg-background flex flex-col">
       <Helmet>
         <title>FAQ — Frequently Asked Questions | DailyNews100</title>
-        <meta name="description" content="Answers to common questions about DailyNews100: how we report the news, comment moderation, privacy, advertising and republishing policies." />
+        <meta name="description" content="Find answers to frequently asked questions about DailyNews100, including details on our reporting, comment moderation, privacy, ads, and republishing rules." />
         <link rel="canonical" href="https://dailynews100.com/faq" />
         <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="FAQ — DailyNews100" />
-        <meta property="og:description" content="Everything you need to know about DailyNews100." />
+        <meta property="og:title" content="FAQ — Frequently Asked Questions | DailyNews100" />
+        <meta property="og:description" content="Find answers to frequently asked questions about DailyNews100, including details on our reporting, comment moderation, privacy, ads, and republishing rules." />
+        <meta property="og:image" content="https://dailynews100.com/placeholder.svg" />
         <meta property="og:url" content="https://dailynews100.com/faq" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="FAQ — Frequently Asked Questions | DailyNews100" />
+        <meta name="twitter:description" content="Find answers to frequently asked questions about DailyNews100, including details on our reporting, comment moderation, privacy, ads, and republishing rules." />
+        <meta name="twitter:image" content="https://dailynews100.com/placeholder.svg" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 

@@ -15,8 +15,13 @@ const About = () => {
         <meta name="robots" content="index, follow" />
         <meta property="og:title" content="About DailyNews100 — Who We Are" />
         <meta property="og:description" content="DailyNews100 is a global digital news portal delivering fast, fact-checked stories across politics, business, sports, entertainment, technology and health." />
+        <meta property="og:image" content="https://dailynews100.com/placeholder.svg" />
         <meta property="og:url" content="https://dailynews100.com/about" />
         <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About DailyNews100 — Who We Are" />
+        <meta name="twitter:description" content="DailyNews100 is a global digital news portal delivering fast, fact-checked stories across politics, business, sports, entertainment, technology and health." />
+        <meta name="twitter:image" content="https://dailynews100.com/placeholder.svg" />
       </Helmet>
       <Header />
       <main id="main-content" className="container-blog py-12">

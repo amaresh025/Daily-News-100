@@ -27,7 +27,7 @@ const META: Record<string, CatMeta> = {
   accidents: {
     label: 'Accidents',
     metaTitle: 'Accident News — Road, Air & Major Incidents | DailyNews100',
-    metaDescription: 'Latest accident news: road crashes, air incidents, industrial mishaps and major emergencies — verified reports updated 24/7 on DailyNews100.',
+    metaDescription: 'Get the latest accident news. We cover road crashes, aviation incidents, industrial mishaps, and major emergencies with verified, 24/7 reports on DailyNews100.',
     h1: 'Accident News — Road, Air &amp; Major Incidents',
     keywords: ['accident news', 'road accident', 'plane crash', 'breaking incidents', 'emergency news'],
     related: [{ slug: 'health', label: 'Health emergencies' }, { slug: 'politics', label: 'Public-safety policy' }],
@@ -35,23 +35,23 @@ const META: Record<string, CatMeta> = {
   business: {
     label: 'Business',
     metaTitle: 'Business News — Markets, Economy & Companies | DailyNews100',
-    metaDescription: 'Business news, market updates, company earnings, startups and the global economy — clear, timely reporting on DailyNews100.',
+    metaDescription: 'Get the latest business news, stock market updates, company earnings, startup profiles, and global economy insights with clear, timely reporting on DailyNews100.',
     h1: 'Business News — Markets, Economy &amp; Companies',
     keywords: ['business news', 'stock market', 'economy news', 'company earnings', 'startup news'],
     related: [{ slug: 'technology', label: 'Tech business' }, { slug: 'politics', label: 'Economic policy' }],
   },
   sports: {
     label: 'Sports',
-    metaTitle: 'Sports News — Scores, Highlights & Match Reports | DailyNews100',
-    metaDescription: 'Latest sports news, live scores, transfers, match reports and player interviews across cricket, football, tennis and more on DailyNews100.',
+    metaTitle: 'Sports News — Live Scores & Match Highlights | DailyNews100',
+    metaDescription: 'Get the latest sports news, live scores, transfer updates, match reports, and player interviews across cricket, football, tennis, and more on DailyNews100.',
     h1: 'Sports News — Scores, Highlights &amp; Match Reports',
     keywords: ['sports news', 'live scores', 'football news', 'cricket news', 'match highlights'],
     related: [{ slug: 'entertainment', label: 'Celebrity sports stories' }, { slug: 'health', label: 'Athlete health' }],
   },
   entertainment: {
     label: 'Entertainment',
-    metaTitle: 'Entertainment News — Movies, Music & Celebrities | DailyNews100',
-    metaDescription: 'Latest entertainment news on movies, music, streaming, TV shows and celebrity stories from around the world on DailyNews100.',
+    metaTitle: 'Entertainment News — Movies, Music & Celebs | DailyNews100',
+    metaDescription: 'Get the latest entertainment news. We cover movies, music, streaming releases, television shows, and celebrity stories from around the world on DailyNews100.',
     h1: 'Entertainment News — Movies, Music &amp; Celebrities',
     keywords: ['entertainment news', 'celebrity news', 'movie reviews', 'music news', 'streaming releases'],
     related: [{ slug: 'sports', label: 'Sports entertainment' }, { slug: 'technology', label: 'Streaming tech' }],
@@ -59,15 +59,15 @@ const META: Record<string, CatMeta> = {
   technology: {
     label: 'Technology',
     metaTitle: 'Technology News — AI, Gadgets & Startups | DailyNews100',
-    metaDescription: 'Technology news on AI, smartphones, gadgets, cybersecurity, startups and product launches — daily tech coverage on DailyNews100.',
+    metaDescription: 'Get technology news on artificial intelligence, smartphones, gadgets, cybersecurity, startups, and new product launches with daily tech updates on DailyNews100.',
     h1: 'Technology News — AI, Gadgets &amp; Startups',
     keywords: ['technology news', 'AI news', 'gadget reviews', 'smartphone launches', 'cybersecurity news'],
     related: [{ slug: 'business', label: 'Tech business' }, { slug: 'politics', label: 'Tech regulation' }],
   },
   health: {
     label: 'Health',
-    metaTitle: 'Health News — Medical Research, Fitness & Wellness | DailyNews100',
-    metaDescription: 'Health news covering medical research, public health alerts, fitness, mental wellness and nutrition — trusted updates on DailyNews100.',
+    metaTitle: 'Health News — Medical Research & Wellness | DailyNews100',
+    metaDescription: 'Get trusted health news. We cover the latest medical research, public health alerts, fitness tips, mental wellness guidance, and nutrition on DailyNews100.',
     h1: 'Health News — Medical Research, Fitness &amp; Wellness',
     keywords: ['health news', 'medical research', 'wellness tips', 'mental health', 'public health'],
     related: [{ slug: 'accidents', label: 'Emergency &amp; safety' }, { slug: 'technology', label: 'Health tech' }],
@@ -80,6 +80,25 @@ const Category = () => {
   const meta = META[slug];
   const label = meta?.label ?? slug;
 
+  const breadcrumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://dailynews100.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": label,
+        "item": `https://dailynews100.com/category/${slug}`
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {meta && (
@@ -91,7 +110,14 @@ const Category = () => {
           <meta name="robots" content="index, follow" />
           <meta property="og:title" content={meta.metaTitle} />
           <meta property="og:description" content={meta.metaDescription} />
+          <meta property="og:image" content="https://dailynews100.com/placeholder.svg" />
           <meta property="og:url" content={`https://dailynews100.com/category/${slug}`} />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={meta.metaTitle} />
+          <meta name="twitter:description" content={meta.metaDescription} />
+          <meta name="twitter:image" content="https://dailynews100.com/placeholder.svg" />
+          <script type="application/ld+json">{JSON.stringify(breadcrumbs)}</script>
         </Helmet>
       )}
       <Header />
