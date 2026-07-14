@@ -24,12 +24,12 @@ function escapeXml(unsafe: string): string {
   });
 }
 
-function formatIsoDate(dateStr: string | null | undefined): string {
-  if (!dateStr) return new Date().toISOString();
+function formatIsoDate(dateStr: string | null | undefined, fallbackDate: string = '2026-07-13T00:00:00.000Z'): string {
+  if (!dateStr) return fallbackDate;
   try {
     return new Date(dateStr).toISOString();
   } catch (e) {
-    return new Date().toISOString();
+    return fallbackDate;
   }
 }
 
@@ -205,7 +205,18 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       return new Response(`Error querying categories: ${catErr.message}`, { status: 500 });
     }
 
-    const staticCount = 7;
+    const staticPages = [
+      { path: '', changefreq: 'daily', priority: '1.0' },
+      { path: '/latest', changefreq: 'monthly', priority: '0.6' },
+      { path: '/about', changefreq: 'monthly', priority: '0.6' },
+      { path: '/contact', changefreq: 'monthly', priority: '0.6' },
+      { path: '/privacy', changefreq: 'monthly', priority: '0.6' },
+      { path: '/terms', changefreq: 'monthly', priority: '0.6' },
+      { path: '/disclaimer', changefreq: 'monthly', priority: '0.6' },
+      { path: '/faq', changefreq: 'monthly', priority: '0.6' },
+    ];
+
+    const staticCount = staticPages.length;
     const categoryCount = categories ? categories.length : 0;
     const totalArticles = articleCount || 0;
     const totalUrls = staticCount + categoryCount + totalArticles;
@@ -216,15 +227,15 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     // Fetch latest updated date for overall lastmod fallbacks
     const { data: latestPost } = await supabase
       .from('posts')
-      .select('updated_at, created_at')
+      .select('updated_at, published_at')
       .eq('status', 'published')
       .lte('published_at', new Date().toISOString())
-      .order('published_at', { ascending: false })
+      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle();
 
-    const fallbackDate = new Date().toISOString();
-    const latestDate = latestPost ? (latestPost.updated_at || latestPost.created_at || fallbackDate) : fallbackDate;
+    const defaultFallbackDate = '2026-07-13T00:00:00.000Z';
+    const latestDbDate = latestPost ? (latestPost.updated_at || latestPost.published_at || defaultFallbackDate) : defaultFallbackDate;
 
     // Handle sitemap index request (or regular sitemap.xml request when total > 50,000)
     if (isIndex || (sitemapParam === 'sitemap.xml' && needsIndex)) {
@@ -235,8 +246,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       for (let i = 1; i <= totalSitemaps; i++) {
         xml += `  <sitemap>\n`;
         xml += `    <loc>${domain}/sitemap-${i}.xml</loc>\n`;
-        xml += `    <lastmod>${formatIsoDate(latestDate)}</lastmod>\n`;
-        xml += `  </sitemap>\n`;
+        xml += `    <lastmod>${formatIsoDate(latestDbDate, defaultFallbackDate)}</lastmod>\n`;
+        xml += `    </sitemap>\n`;
       }
       xml += `</sitemapindex>\n`;
 
@@ -259,23 +270,12 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     // Build URLs list for current chunk
     const urls: { loc: string; lastmod: string; changefreq: string; priority: string }[] = [];
 
-    // Static pages details
-    const staticPages = [
-      { path: '', changefreq: 'hourly', priority: '1.0' },
-      { path: '/latest', changefreq: 'monthly', priority: '0.6' },
-      { path: '/about', changefreq: 'monthly', priority: '0.6' },
-      { path: '/contact', changefreq: 'monthly', priority: '0.6' },
-      { path: '/privacy', changefreq: 'monthly', priority: '0.6' },
-      { path: '/terms', changefreq: 'monthly', priority: '0.6' },
-      { path: '/faq', changefreq: 'monthly', priority: '0.6' },
-    ];
-
     // Page 1 gets static pages & categories
     if (currentPage === 1) {
       for (const sp of staticPages) {
         urls.push({
           loc: `${domain}${sp.path}`,
-          lastmod: formatIsoDate(latestDate),
+          lastmod: formatIsoDate(latestDbDate, defaultFallbackDate),
           changefreq: sp.changefreq,
           priority: sp.priority,
         });
@@ -285,7 +285,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         for (const cat of categories) {
           urls.push({
             loc: `${domain}/category/${cat.slug}`,
-            lastmod: formatIsoDate(cat.updated_at || cat.created_at || latestDate),
+            lastmod: formatIsoDate(cat.updated_at || cat.created_at, latestDbDate),
             changefreq: 'daily',
             priority: '0.8',
           });
@@ -309,7 +309,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     if (articleStart < totalArticles) {
       const { data: posts, error: postsErr } = await supabase
         .from('posts')
-        .select('slug, updated_at, created_at')
+        .select('slug, updated_at, published_at')
         .eq('status', 'published')
         .lte('published_at', new Date().toISOString())
         .order('published_at', { ascending: false })
@@ -323,9 +323,9 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         for (const post of posts) {
           urls.push({
             loc: `${domain}/blog/${post.slug}`,
-            lastmod: formatIsoDate(post.updated_at || post.created_at),
-            changefreq: 'hourly',
-            priority: '0.9',
+            lastmod: formatIsoDate(post.updated_at || post.published_at, latestDbDate),
+            changefreq: 'weekly',
+            priority: '0.7',
           });
         }
       }

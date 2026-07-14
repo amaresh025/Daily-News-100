@@ -23,6 +23,7 @@ const Index = () => {
       <Header />
       <BreakingTicker />
       <main id="main-content" className="flex-1">
+        <h1 className="sr-only">DailyNews100 – Latest Breaking News, Technology, Business, Sports & World News</h1>
         <TopHeadline />
         <LatestNews />
         <TrendingNews />
