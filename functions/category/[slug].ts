@@ -65,7 +65,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   }
 
   if (!supabaseUrl || !supabaseKey) {
-    return context.env.ASSETS.fetch(new URL('/index.html', context.request.url));
+    return context.env.ASSETS.fetch(new URL('/', context.request.url));
   }
 
   const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
@@ -152,8 +152,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       );
     }
 
-    return context.env.ASSETS.fetch(new URL('/index.html', context.request.url));
+    return context.env.ASSETS.fetch(new URL('/', context.request.url));
   } catch (err) {
-    return context.env.ASSETS.fetch(new URL('/index.html', context.request.url));
+    return context.env.ASSETS.fetch(new URL('/', context.request.url));
   }
 };

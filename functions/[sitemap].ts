@@ -100,7 +100,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     const path = url.pathname;
     const hasExtension = path.includes('.') && !path.endsWith('/');
     if (!hasExtension) {
-      return context.env.ASSETS.fetch(new URL('/index.html', context.request.url));
+      return context.env.ASSETS.fetch(new URL('/', context.request.url));
     }
     return context.next();
   }
