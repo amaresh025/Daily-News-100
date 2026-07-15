@@ -9,6 +9,7 @@ interface Env {
   SUPABASE_ANON_KEY?: string;
   VITE_SUPABASE_ANON_KEY?: string;
   VITE_SUPABASE_PUBLISHABLE_KEY?: string;
+  ASSETS?: any;
 }
 
 function escapeXml(unsafe: string): string {
@@ -95,6 +96,12 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   
   if (!match) {
     // Pass execution to standard routing (SPA index.html / static files)
+    const url = new URL(context.request.url);
+    const path = url.pathname;
+    const hasExtension = path.includes('.') && !path.endsWith('/');
+    if (!hasExtension) {
+      return context.env.ASSETS.fetch(new URL('/index.html', context.request.url));
+    }
     return context.next();
   }
 

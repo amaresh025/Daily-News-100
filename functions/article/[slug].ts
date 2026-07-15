@@ -9,6 +9,7 @@ interface Env {
   SUPABASE_ANON_KEY?: string;
   VITE_SUPABASE_ANON_KEY?: string;
   VITE_SUPABASE_PUBLISHABLE_KEY?: string;
+  ASSETS?: any;
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
@@ -64,7 +65,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   }
 
   if (!supabaseUrl || !supabaseKey) {
-    return context.next();
+    return Response.redirect(new URL(`/blog/${slug}`, context.request.url).toString(), 301);
   }
 
   const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
@@ -153,8 +154,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       );
     }
 
-    return context.next();
+    return Response.redirect(new URL(`/blog/${slug}`, context.request.url).toString(), 301);
   } catch (err) {
-    return context.next();
+    return Response.redirect(new URL(`/blog/${slug}`, context.request.url).toString(), 301);
   }
 };
